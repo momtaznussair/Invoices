@@ -27,6 +27,36 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
+				{{-- store errors --}}
+				@if ($errors->any())
+				<div class="alert alert-danger">
+					<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+					</ul>
+				</div>
+				@endif
+				{{-- success message --}}
+				@if (session()->has('Add'))
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>{{ session()->get('Add') }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@endif
+
+				{{-- delete message --}}
+				@if (session()->has('delete'))
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>{{ session()->get('delete') }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@endif
+
 				<!-- row -->
 				<div class="row">
 					<div class="col-xl-12">
@@ -42,7 +72,7 @@
 								<div class="table-responsive">
 									<table id="example1" class="table key-buttons text-md-nowrap">
 										<thead>
-											<tr>
+											<tr class="text-center">
 												<th class="border-bottom-0">#</th>
 												<th class="border-bottom-0">اسم القسم</th>
 												<th class="border-bottom-0">الوصف</th>
@@ -50,12 +80,24 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>1</td>
-												<td>23346674</td>
-												<td>2015-12-3</td>
-												<td>2017-2-1</td>
+											@foreach ($sections as $index => $section)
+											<tr class="text-center">
+												<td>{{$index + 1}}</td>
+												<td>{{$section->section_name}}</td>
+												<td>{{$section->description}}</td>
+												<td>
+													<a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+													data-id="{{ $section->id }}" data-section_name="{{ $section->section_name }}"
+													data-description="{{ $section->description }}" data-toggle="modal"
+													href="#exampleModal2" title="تعديل"><i class="las la-pen"></i></a>
+
+													<a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+													data-id="{{ $section->id }}" data-section_name="{{ $section->section_name }}"
+													data-toggle="modal" href="#modaldemo9" title="حذف"><i
+														class="las la-trash"></i></a>
+												</td>
 											</tr>
+											@endforeach
 										</tbody>
 									</table>
 								</div>
@@ -94,6 +136,74 @@
 					</div>
 					{{--end of  add a section modal --}}
 
+
+					{{-- edit a section modal --}}
+					<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">تعديل القسم</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+
+								<form action="sections/update" method="post" autocomplete="off">
+									{{ method_field('put') }}
+									{{ csrf_field() }}
+									<div class="form-group">
+										<input type="hidden" name="id" id="id" value="">
+										<label for="recipient-name" class="col-form-label">اسم القسم:</label>
+										<input class="form-control" name="section_name" id="section_name" type="text">
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">ملاحظات:</label>
+										<textarea class="form-control" id="description" name="description"></textarea>
+									</div>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary">تاكيد</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+							</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				{{-- end of edit a section modal --}}
+
+
+				{{-- delete modal --}}
+				 <div class="modal" id="modaldemo9">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content modal-content-demo">
+							<div class="modal-header">
+								<h6 class="modal-title">حذف القسم</h6><button aria-label="Close" class="close" data-dismiss="modal"
+									type="button"><span aria-hidden="true">&times;</span></button>
+							</div>
+							<form action="{{route('sections.destroy', $section->id)}}" method="post">
+								{{ method_field('delete') }}
+								{{ csrf_field() }}
+								<div class="modal-body">
+									<p>هل انت متاكد من عملية الحذف ؟</p><br>
+									<input type="hidden" name="id" id="id" value="">
+									<input class="form-control" name="section_name" id="section_name" type="text" readonly>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+									<button type="submit" class="btn btn-danger">تاكيد</button>
+								</div>
+						</div>
+						</form>
+					</div>
+				</div>
+				{{--end of delete modal --}}
+
+
+
+
 				</div>
 				<!-- row closed -->
 			</div>
@@ -125,4 +235,32 @@
 <script src="{{URL::asset('assets/plugins/select2/js/select2.min.js')}}"></script>
 <!-- Internal Modal js-->
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
+
+
+{{-- modals data --}}
+{{-- edit --}}
+<script>
+    $('#exampleModal2').on('show.bs.modal', function(event) {
+        let button = $(event.relatedTarget)
+        let id = button.data('id')
+        let section_name = button.data('section_name')
+        let description = button.data('description')
+        let modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #section_name').val(section_name);
+        modal.find('.modal-body #description').val(description);
+    })
+</script>
+{{-- delete --}}
+
+<script>
+    $('#modaldemo9').on('show.bs.modal', function(event) {
+        let button = $(event.relatedTarget)
+        let id = button.data('id')
+        let section_name = button.data('section_name')
+        let modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #section_name').val(section_name);
+    })
+</script>
 @endsection
