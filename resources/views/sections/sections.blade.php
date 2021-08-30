@@ -70,12 +70,12 @@
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example1" class="table key-buttons text-md-nowrap">
+									<table id="example1" class="table key-buttons text-md-nowrap" data-page-length="50">
 										<thead>
 											<tr class="text-center">
 												<th class="border-bottom-0">#</th>
 												<th class="border-bottom-0">اسم القسم</th>
-												<th class="border-bottom-0">الوصف</th>
+												<th class="border-bottom-0">ملاحظات</th>
 												<th class="border-bottom-0">ألعمليات</th>
 											</tr>
 										</thead>
@@ -112,9 +112,9 @@
 									<h6 class="modal-title">اضافة قسم</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
 								</div>
 								<div class="modal-body">
-									<form action="{{ route('sections.store') }}" method="post">
+									<form action="{{ route('sections.store') }}" method="post" autocomplete="off">
 										{{ csrf_field() }}
-
+										
 										<div class="form-group">
 											<label for="exampleInputEmail1">اسم القسم</label>
 											<input type="text" class="form-control" id="section_name" name="section_name">
@@ -183,7 +183,7 @@
 								<h6 class="modal-title">حذف القسم</h6><button aria-label="Close" class="close" data-dismiss="modal"
 									type="button"><span aria-hidden="true">&times;</span></button>
 							</div>
-							<form action="{{route('sections.destroy', $section->id)}}" method="post">
+							<form action="sections/destroy', $section->id)}}" method="post">
 								{{ method_field('delete') }}
 								{{ csrf_field() }}
 								<div class="modal-body">
