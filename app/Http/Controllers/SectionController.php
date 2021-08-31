@@ -38,14 +38,13 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         $validator = $request->validate([
-            'section_name' => 'required|unique:sections,section_name|max:255',
-            'description' => 'required',
+            'section_name' => 'required|unique:sections,section_name|max:999',
+            'description' => 'string',
         ],
         [
             'section_name.required' => 'يرجي ادخال اسم القسم',
             'section_name.unique' => 'اسم القسم مدخل مسبقا',
             'section_name.max' => 'الحد الاقصى لاسم القسم هو 255 حرف',
-            'description.required' => 'يرجي ادخال وصف القسم',
         ]);
 
         if ($validator)
@@ -95,13 +94,12 @@ class SectionController extends Controller
         $id = $request->id;
         $validator = $request->validate([
             'section_name' => "required|max:255|unique:sections,section_name,". $id,
-            'description' => 'required',
+            'description' => 'string',
         ],
         [
             'section_name.required' => 'يرجي ادخال اسم القسم',
             'section_name.unique' => 'اسم القسم مدخل مسبقا',
             'section_name.max' => 'الحد الاقصى لاسم القسم هو 255 حرف',
-            'description.required' => 'يرجي ادخال وصف القسم',
         ]);
 
         if ($validator)

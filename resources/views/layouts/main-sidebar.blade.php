@@ -64,6 +64,7 @@
 				<ul class="slide-menu">
 					<li><a class="slide-item" href="{{ url('/' . $page='sections') }}">الأقسام</a></li>
 					<li><a class="slide-item" href="{{ url('/' . $page='products') }}">المنتجات</a></li>
+					<li><a class="slide-item" href="{{ url('/' . $page='statuses') }}">حالات الفواتير</a></li>
 				</ul>
 			</li>
 
