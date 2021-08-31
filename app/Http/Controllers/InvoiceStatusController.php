@@ -39,12 +39,12 @@ class InvoiceStatusController extends Controller
     {
         $validator = $request->validate([
             'status_name' => 'required|unique:invoice_statuses,status_name|max:999',
-            'description' => 'string',
+            'description' => 'string|nullable',
         ],
         [
-            'section_name.required' => 'يرجي ادخال اسم الحالة',
-            'section_name.unique' => 'اسم الحالة مدخل مسبقا',
-            'section_name.max' => 'الحد الاقصى لاسم الحالة هو 999 حرف',
+            'status_name.required' => 'يرجي ادخال اسم الحالة',
+            'status_name.unique' => 'اسم الحالة مدخل مسبقا',
+            'status_name.max' => 'الحد الاقصى لاسم الحالة هو 999 حرف',
         ]);
 
         if ($validator)

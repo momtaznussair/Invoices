@@ -29,6 +29,17 @@
 @endsection
 @section('content')
 
+    {{-- store errors --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    {{-- success message --}}
     @if (session()->has('Add'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>{{ session()->get('Add') }}</strong>
@@ -38,6 +49,24 @@
         </div>
     @endif
 
+    @if (session()->has('Edit'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('Edit') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    {{-- delete message --}}
+    @if (session()->has('delete'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('delete') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     <!-- row -->
     <div class="row">
 
@@ -85,7 +114,7 @@
 
                             <div class="col">
                                 <label for="inputName" class="control-label">المنتج</label>
-                                <select id="product" name="product" class="form-control">
+                                <select id="product_id" name="product_id" class="form-control">
                                 </select>
                             </div>
 
@@ -122,11 +151,11 @@
                                 <select name="Rate_VAT" id="Rate_VAT" class="form-control" onchange="getTotal()">
                                     <!--placeholder-->
                                     <option value="" selected disabled>حدد نسبة الضريبة</option>
-                                    <option value=" 5%">5%</option>
-                                    <option value=" 7%">7%</option>
-                                    <option value="10%">10%</option>
-                                    <option value="12%">12%</option>
-                                    <option value="15%">15%</option>
+                                    <option value="5">5%</option>
+                                    <option value="7">7%</option>
+                                    <option value="10">10%</option>
+                                    <option value="12">12%</option>
+                                    <option value="15">15%</option>
                                 </select>
                             </div>
 
@@ -158,8 +187,8 @@
                         <h5 class="card-title">المرفقات</h5>
 
                         <div class="col-sm-12 col-md-12">
-                            <input type="file" name="pic" class="dropify" accept=".pdf,.jpg, .png, image/jpeg, image/png"
-                                data-height="70" />
+                            <input type="file" name="attachment" class="dropify"
+                                accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
                         </div><br>
 
                         <div class="d-flex justify-content-center">
@@ -223,11 +252,12 @@
                         type: "GET",
                         dataType: "json",
                         success: function(data) {
-                            console.log(`produsts are ${data}`);
-                            $('select[name="product"]').empty();
+                            $('select[name="product_id"]').empty();
                             $.each(data, function(key, value) {
-                                $('select[name="product"]').append('<option value="' +
-                                    value.id + '">' + value.product_name + '</option>');
+                                $('select[name="product_id"]').append(
+                                    '<option value="' +
+                                    value.id + '">' + value.product_name +
+                                    '</option>');
                             });
                         },
                     });
@@ -239,26 +269,26 @@
     </script>
 
 
-<script>
-    // get net commission after discount and tax
-    function getTotal() {
-        var Amount_Commission = parseFloat(document.getElementById("Amount_Commission").value);
-        var Discount = parseFloat(document.getElementById("Discount").value);
-        var Rate_VAT = parseFloat(document.getElementById("Rate_VAT").value);
-        var Value_VAT = parseFloat(document.getElementById("Value_VAT").value);
-        var Amount_Commission2 = Amount_Commission - Discount;
-        if (typeof Amount_Commission === 'undefined' || !Amount_Commission) {
-            alert('يرجي ادخال مبلغ العمولة ');
-        } else {
-            var intResults = Amount_Commission2 * Rate_VAT / 100;
-            var intResults2 = parseFloat(intResults + Amount_Commission2);
-            sumq = parseFloat(intResults).toFixed(2);
-            sumt = parseFloat(intResults2).toFixed(2);
-            document.getElementById("Value_VAT").value = sumq;
-            document.getElementById("Total").value = sumt;
+    <script>
+        // get net commission after discount and tax
+        function getTotal() {
+            var Amount_Commission = parseFloat(document.getElementById("Amount_Commission").value);
+            var Discount = parseFloat(document.getElementById("Discount").value);
+            var Rate_VAT = parseFloat(document.getElementById("Rate_VAT").value);
+            var Value_VAT = parseFloat(document.getElementById("Value_VAT").value);
+            var Amount_Commission2 = Amount_Commission - Discount;
+            if (typeof Amount_Commission === 'undefined' || !Amount_Commission) {
+                alert('يرجي ادخال مبلغ العمولة ');
+            } else {
+                var intResults = Amount_Commission2 * Rate_VAT / 100;
+                var intResults2 = parseFloat(intResults + Amount_Commission2);
+                sumq = parseFloat(intResults).toFixed(2);
+                sumt = parseFloat(intResults2).toFixed(2);
+                document.getElementById("Value_VAT").value = sumq;
+                document.getElementById("Total").value = sumt;
+            }
         }
-    }
-</script>
+    </script>
 
 
 @endsection
