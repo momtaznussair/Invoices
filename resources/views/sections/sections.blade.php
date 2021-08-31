@@ -122,7 +122,7 @@
 
 										<div class="form-group">
 											<label for="exampleFormControlTextarea1">ملاحظات</label>
-											<textarea class="form-control" id="description" name="description" rows="3"></textarea>
+											<textarea class="form-control" id="desc" name="description" rows="3"></textarea>
 										</div>
 										
 										<div class="modal-footer">
@@ -156,7 +156,7 @@
 									<div class="form-group">
 										<input type="hidden" name="id" id="id" value="">
 										<label for="recipient-name" class="col-form-label">اسم القسم:</label>
-										<input class="form-control" name="section_name" id="section_name" type="text">
+										<input class="form-control" name="section_name" id="old_section_name" type="text">
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">ملاحظات:</label>
@@ -188,8 +188,8 @@
 								{{ csrf_field() }}
 								<div class="modal-body">
 									<p>هل انت متاكد من عملية الحذف ؟</p><br>
-									<input type="hidden" name="id" id="id" value="">
-									<input class="form-control" name="section_name" id="section_name" type="text" readonly>
+									<input type="hidden" name="id" id="product_id" value="">
+									<input class="form-control" name="section_name" id="del_section_name" type="text" readonly>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -247,7 +247,7 @@
         let description = button.data('description')
         let modal = $(this)
         modal.find('.modal-body #id').val(id);
-        modal.find('.modal-body #section_name').val(section_name);
+        modal.find('.modal-body #old_section_name').val(section_name);
         modal.find('.modal-body #description').val(description);
     })
 </script>
@@ -259,8 +259,8 @@
         let id = button.data('id')
         let section_name = button.data('section_name')
         let modal = $(this)
-        modal.find('.modal-body #id').val(id);
-        modal.find('.modal-body #section_name').val(section_name);
+        modal.find('.modal-body #product_id').val(id);
+        modal.find('.modal-body #del_section_name').val(section_name);
     })
 </script>
 @endsection

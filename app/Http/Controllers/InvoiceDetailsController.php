@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoice;
-use App\Models\Section;
-use Facade\FlareClient\Http\Response;
+use App\Models\InvoiceDetails;
 use Illuminate\Http\Request;
 
-class InvoiceController extends Controller
+class InvoiceDetailsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return view('invoices.invoices');
+        //
     }
 
     /**
@@ -26,8 +24,7 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $sections = Section::all();
-        return view('invoices.add_invoice', ['sections' => $sections]);
+        //
     }
 
     /**
@@ -44,10 +41,10 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Invoice  $invoice
+     * @param  \App\Models\InvoiceDetails  $invoiceDetails
      * @return \Illuminate\Http\Response
      */
-    public function show(Invoice $invoice)
+    public function show(InvoiceDetails $invoiceDetails)
     {
         //
     }
@@ -55,10 +52,10 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Invoice  $invoice
+     * @param  \App\Models\InvoiceDetails  $invoiceDetails
      * @return \Illuminate\Http\Response
      */
-    public function edit(Invoice $invoice)
+    public function edit(InvoiceDetails $invoiceDetails)
     {
         //
     }
@@ -67,10 +64,10 @@ class InvoiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice  $invoice
+     * @param  \App\Models\InvoiceDetails  $invoiceDetails
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(Request $request, InvoiceDetails $invoiceDetails)
     {
         //
     }
@@ -78,21 +75,11 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Invoice  $invoice
+     * @param  \App\Models\InvoiceDetails  $invoiceDetails
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Invoice $invoice)
+    public function destroy(InvoiceDetails $invoiceDetails)
     {
         //
-    }
-
-    public function getProducts($section_id)
-    {
-        $section = Section::findOrFail($section_id);
-
-        if ($section)
-        {
-            return response()->json($section->products);
-        }
     }
 }

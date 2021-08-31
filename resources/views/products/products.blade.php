@@ -184,7 +184,7 @@
 
                                 <input type="hidden" class="form-control" name="pro_id" id="pro_id" value="">
 
-                                <input type="text" class="form-control" name="product_name" id="product_name">
+                                <input type="text" class="form-control" name="product_name" id="old_product_name">
                             </div>
 
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label>
@@ -196,7 +196,7 @@
 
                             <div class="form-group">
                                 <label for="des">ملاحظات :</label>
-                                <textarea name="description" cols="20" rows="5" id='description'
+                                <textarea name="description" cols="20" rows="5" id='old_description'
                                     class="form-control"></textarea>
                             </div>
 
@@ -226,7 +226,7 @@
                         <div class="modal-body">
                             <p>هل انت متاكد من عملية الحذف ؟</p><br>
                             <input type="hidden" name="id" id="id" value="">
-                            <input class="form-control" name="product_name" id="product_name" type="text" readonly>
+                            <input class="form-control" name="product_name" id="del_product_name" type="text" readonly>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -284,9 +284,9 @@
             let pro_id = button.data('pro_id')
             let description = button.data('description')
             let modal = $(this)
-            modal.find('.modal-body #product_name').val(product_name);
+            modal.find('.modal-body #old_product_name').val(product_name);
             modal.find(`.modal-body #section>option[value='${section_id}']`).prop('selected', true);
-            modal.find('.modal-body #description').val(description);
+            modal.find('.modal-body #old_description').val(description);
             modal.find('.modal-body #pro_id').val(pro_id);
             console.log(product_name, section_id, pro_id);
         })
@@ -301,7 +301,7 @@
             let product_name = button.data('product_name')
             let modal = $(this)
             modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #product_name').val(product_name);
+            modal.find('.modal-body #del_product_name').val(product_name);
         })
     </script>
 @endsection
