@@ -162,9 +162,14 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Invoice $invoice)
+    public function destroy(Request $request)
     {
-        //
+        $invoice_id = $request->invoice_id;
+        $invoice = Invoice::findOrFail($invoice_id);
+        $invoice->delete();
+
+        session()->flash('success', 'تم حذف الفاتورة بنجاح ');
+        return back();
     }
 
     public function getProducts($section_id)

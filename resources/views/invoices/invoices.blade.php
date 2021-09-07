@@ -23,6 +23,15 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
+
+				@if (session()->has('success'))
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>{{ session()->get('success') }}</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				@endif
 				<!-- row -->
 				<div class="row">
 					<div class="col-xl-12">
@@ -35,7 +44,7 @@
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example1" class="table key-buttons text-lg-nowrap">
+									<table id="example1" class="table key-buttons text-lg-nowrap" data-page-length="50">
 										<thead>
 											<tr>
 												<th class="border-bottom-0">#</th>
@@ -96,9 +105,9 @@
 																	href="{{route('invoices.edit', $invoice->id)}}">تعديل
 																	الفاتورة</a>
 		
-																<a class="dropdown-item" href="#" data-invoice_id="{{ $invoice->id }}"
-																	data-toggle="modal" data-target="#delete_invoice"><i
-																		class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;حذف
+																<a class="dropdown-item" href="#delete_model" data-invoice_id="{{ $invoice->id }}" data-effect="effect-scale"
+																	data-toggle="modal" data-target="#delete_modal"><i
+																		class="text-danger fas fa-trash-alt pl-2"></i>حذف
 																	الفاتورة</a>
 		
 																<a class="dropdown-item"
@@ -109,11 +118,11 @@
 		
 																<a class="dropdown-item" href="#" data-invoice_id="{{ $invoice->id }}"
 																	data-toggle="modal" data-target="#Transfer_invoice"><i
-																		class="text-warning fas fa-exchange-alt"></i>&nbsp;&nbsp;نقل الي
+																		class="text-warning fas fa-exchange-alt pl-2"></i>نقل الي
 																	الارشيف</a>
 		
 																<a class="dropdown-item" href="#"><i
-																		class="text-success fas fa-print"></i>&nbsp;&nbsp;طباعة
+																		class="text-success fas fa-print pl-2"></i>طباعة
 																	الفاتورة
 																</a>
 														</div>
@@ -128,6 +137,33 @@
 							</div>
 						</div>
 					</div>
+
+					 {{-- delete modal --}}
+					 <div class="modal" id="delete_modal">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content modal-content-demo">
+								<div class="modal-header">
+									<h6 class="modal-title">حذف الفاتورة</h6><button aria-label="Close" class="close"
+										data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+								</div>
+								<form action="{{route('invoices.destroy', 'delete')}}" method="post">
+									@method('delete')
+									@csrf
+									<div class="modal-body">
+										<p>هل انت متاكد من عملية الحذف ؟</p><br>
+										<input type="hidden" name="invoice_id" id="invoice_id" value="">
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+										<button type="submit" class="btn btn-danger">تاكيد</button>
+									</div>
+							</div>
+							</form>
+						</div>
+					</div>
+					{{-- end of delete modal --}}
+			
+					
 				</div>
 				<!-- row closed -->
 			</div>
@@ -136,6 +172,18 @@
 		<!-- main-content closed -->
 @endsection
 @section('js')
+
+{{-- delete an invoice --}}
+<script>
+	$('#delete_modal').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget)
+            let invoice_id = button.data('invoice_id')
+            let modal = $(this)
+			console.log(invoice_id);
+            modal.find('.modal-body #invoice_id').val(invoice_id);
+        })
+</script>
+
 <!-- Internal Data tables -->
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js')}}"></script>
