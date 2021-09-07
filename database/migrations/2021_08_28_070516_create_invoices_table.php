@@ -15,7 +15,7 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('invoice_number', 50);
+            $table->string('invoice_number', 50)->unique();
             $table->date('invoice_Date')->nullable();
             $table->date('Due_date')->nullable();
             $table->bigInteger( 'product_id' )->unsigned();
@@ -29,6 +29,7 @@ class CreateInvoicesTable extends Migration
             $table->unsignedBigInteger('status_id');
             $table->foreign('status_id')->references('id')->on('invoice_statuses')->onDelete('cascade');
             $table->text('note')->nullable();
+            $table->string('created_by');
             $table->date('Payment_Date')->nullable();
             $table->softDeletes();
             $table->timestamps();

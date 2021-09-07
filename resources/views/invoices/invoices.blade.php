@@ -53,20 +53,32 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>1</td>
-												<td>23346674</td>
-												<td>2015-12-3</td>
-												<td>2017-2-1</td>
-												<td>CC</td>
-												<td>البنك الأهلي</td>
-												<td>$1000</td>
-												<td>10%</td>
-												<td>$91,000</td>
-												<td>$112,000</td>
-												<td>غير مدفوعة</td>
-												<td>-</td>
+											@foreach ($invoices as $index => $invoice)
+											<tr class="text-center">
+												<td>{{$index + 1}}</td>
+												<td>
+													<a href="{{route('invoice_details.show', $invoice->id)}}">{{ $invoice->invoice_number }}</a>
+												</td>
+												<td>{{$invoice->invoice_Date}}</td>
+												<td>{{$invoice->Due_date}}</td>
+												<td>{{$invoice->product->product_name}}</td>
+												<td>{{$invoice->product->section->section_name}}</td>
+												<td>{{"$" . $invoice->Discount}}</td>
+												<td>{{$invoice->Rate_VAT . "%"}}</td>
+												<td>{{"$" . $invoice->Value_VAT}}</td>
+												<td>{{"$" . $invoice->Total}}</td>
+												<td>
+													@if ($invoice->status->id == 0)
+														<span class="text-danger">{{$invoice->status->status_name}}</span>
+													@elseif ($invoice->status->id == 1)
+														<span class="text-warning">{{$invoice->status->status_name}}</span>
+													@else
+														<span class="text-success">{{$invoice->status->status_name}}</span>
+													@endif
+												</td>
+												<td>{{$invoice->note}}</td>
 											</tr>
+											@endforeach
 										</tbody>
 									</table>
 								</div>

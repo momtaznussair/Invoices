@@ -105,8 +105,8 @@
 												<span class="avatar-status bg-teal"></span>
 											</div>
 											<div class="wd-90p">
-												<div class="d-flex">
-													<h5 class="mb-1 name">Jimmy Changa</h5>
+													<div class="d-flex">
+														<h5 class="mb-1 name">Jimmy Changa</h5>
 												</div>
 												<p class="mb-0 desc">All set ! Now, time to get to you now......</p>
 												<p class="time mb-0 text-left float-right mr-2 mt-2">Mar 06 01:12 AM</p>

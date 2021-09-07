@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\InvoiceStatusController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SectionController;
@@ -31,6 +32,10 @@ Route::resource('invoices', InvoiceController::class);
 Route::resource('sections', SectionController::class);
 Route::resource('products', ProductController::class);
 Route::resource('statuses', InvoiceStatusController::class);
+
+Route::resource('invoice_details', InvoiceDetailsController::class);
+
+Route::get('download/{invoice}/{attachment}', [InvoiceDetailsController::class, 'download']);
 
 Route::get('/section/{id}', [InvoiceController::class, 'getProducts']);
 

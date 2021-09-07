@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
+use App\Models\InvoiceAttachments;
 use App\Models\InvoiceDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceDetailsController extends Controller
 {
@@ -44,9 +47,11 @@ class InvoiceDetailsController extends Controller
      * @param  \App\Models\InvoiceDetails  $invoiceDetails
      * @return \Illuminate\Http\Response
      */
-    public function show(InvoiceDetails $invoiceDetails)
+    public function show($id)
     {
-        //
+        $invoice = Invoice::findOrFail($id);
+
+        return view('invoices.invoice_details', ['invoice' => $invoice]);
     }
 
     /**
@@ -78,8 +83,18 @@ class InvoiceDetailsController extends Controller
      * @param  \App\Models\InvoiceDetails  $invoiceDetails
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InvoiceDetails $invoiceDetails)
+    public function destroy(Request $request)
     {
-        //
+        $attachment = InvoiceAttachments::findOrFail($request->attachment_id);
+        Storage::delete($attachment->file_name);
+        $attachment->delete();
+
+        session()->flash('success', 'تم حذف المرفق بنجاح');
+        return back();
+    }
+
+    public function download($invoice, $attachment)
+    {
+        return Storage::download($invoice.'/'.$attachment);
     }
 }

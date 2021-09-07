@@ -10,7 +10,7 @@ class InvoiceDetails extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_Invoice',
+        'invoice_id',
         'status_id',
         'created_by',
     ];
@@ -18,5 +18,10 @@ class InvoiceDetails extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(InvoiceStatus::class);
     }
 }
