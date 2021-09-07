@@ -186,7 +186,7 @@
 
                             <div class="table-responsive mt-15">
                                 
-                                <table class="table center-aligned-table mb-0 table table-hover" style="text-align:center">
+                                <table class="table center-aligned-table mb-0 table table-hover" style="text-align:center"  data-page-length="10">
                                     <thead>
                                         <tr class="text-dark">
                                             <th scope="col">م</th>
@@ -207,7 +207,7 @@
     
                                                     <a class="btn btn-outline-success btn-sm"
                                                         href="{{ url(asset('attachments')) }}/{{ $attachment->file_name }}"
-                                                        role="button"><i class="fas fa-eye"></i>&nbsp;
+                                                        role="button" target="_blank"><i class="fas fa-eye"></i>&nbsp;
                                                         عرض</a>
     
                                                     <a class="btn btn-outline-info btn-sm"

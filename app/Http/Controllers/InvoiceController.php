@@ -6,7 +6,6 @@ use App\Models\Invoice;
 use App\Models\InvoiceAttachments;
 use App\Models\InvoiceDetails;
 use App\Models\Section;
-use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -109,9 +108,13 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function edit(Invoice $invoice)
+    public function edit($invoice_id)
     {
-        //
+        $invoice = Invoice::findOrFail($invoice_id);
+
+        $sections = Section::all();
+
+        return view('invoices.edit_invoice', ['invoice' => $invoice, 'sections' => $sections]);
     }
 
     /**
@@ -121,9 +124,36 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = $request->validate([
+            'invoice_number' => "required|max:50|unique:invoices,invoice_number,".$id,
+            'invoice_Date' => 'required|date',
+            'Due_date' => 'required|date',
+            'product_id' => 'required|exists:products,id',
+            'Amount_collection' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Amount_Commission' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Discount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Rate_VAT' => 'required|numeric',
+            'Value_VAT' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Total' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'note' => 'string|nullable',
+        ]);
+
+        if ($validator)
+        {
+            $invoice = Invoice::find($id);
+
+            if ($invoice)
+            {
+                $invoice->update(
+                    $request->all()
+                );
+                
+                session()->flash('success', 'تم تعديل الفاتورة بنجاح ');
+                return back();
+            }
+        }
     }
 
     /**

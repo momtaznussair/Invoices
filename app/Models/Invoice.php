@@ -22,6 +22,7 @@ class Invoice extends Model
         'Total',
         'status_id',
         'note',
+        'created_by',
     ];
 
     public function status()

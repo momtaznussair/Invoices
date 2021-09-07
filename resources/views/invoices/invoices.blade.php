@@ -35,7 +35,7 @@
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example1" class="table key-buttons text-md-nowrap">
+									<table id="example1" class="table key-buttons text-lg-nowrap">
 										<thead>
 											<tr>
 												<th class="border-bottom-0">#</th>
@@ -49,7 +49,8 @@
 												<th class="border-bottom-0">قيمة الضريبة</th>
 												<th class="border-bottom-0">الإجمالي</th>
 												<th class="border-bottom-0">الحالة</th>
-												<th class="border-bottom-0">ملاحظات</th>
+												{{-- <th class="border-bottom-0">ملاحظات</th> --}}
+												<th class="border-bottom-0">العمليات</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -67,16 +68,58 @@
 												<td>{{$invoice->Rate_VAT . "%"}}</td>
 												<td>{{"$" . $invoice->Value_VAT}}</td>
 												<td>{{"$" . $invoice->Total}}</td>
+
+												@if ($invoice->status_id == 2)
+													<td><span
+															class="badge badge-pill badge-success">{{ $invoice->status->status_name }}</span>
+													</td>
+												@elseif($invoice->status_id == 0)
+													<td><span
+															class="badge badge-pill badge-danger">{{ $invoice->status->status_name }}</span>
+													</td>
+												@else
+													<td><span
+															class="badge badge-pill badge-warning">{{ $invoice->status->status_name }}</span>
+													</td>
+												@endif
+
+												{{-- <td>{{$invoice->note}}</td> --}}
+
+												{{-- العمليات --}}
 												<td>
-													@if ($invoice->status->id == 0)
-														<span class="text-danger">{{$invoice->status->status_name}}</span>
-													@elseif ($invoice->status->id == 1)
-														<span class="text-warning">{{$invoice->status->status_name}}</span>
-													@else
-														<span class="text-success">{{$invoice->status->status_name}}</span>
-													@endif
+													<div class="dropdown">
+														<button aria-expanded="false" aria-haspopup="true"
+															class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+															type="button">العمليات<i class="fas fa-caret-down ml-1"></i></button>
+														<div class="dropdown-menu tx-13">
+																<a class="dropdown-item"
+																	href="{{route('invoices.edit', $invoice->id)}}">تعديل
+																	الفاتورة</a>
+		
+																<a class="dropdown-item" href="#" data-invoice_id="{{ $invoice->id }}"
+																	data-toggle="modal" data-target="#delete_invoice"><i
+																		class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;حذف
+																	الفاتورة</a>
+		
+																<a class="dropdown-item"
+																	href="#"><i
+																		class=" text-success fas																																																																																																																																			fa-money-bill"></i>&nbsp;&nbsp;تغير
+																	حالة
+																	الدفع</a>
+		
+																<a class="dropdown-item" href="#" data-invoice_id="{{ $invoice->id }}"
+																	data-toggle="modal" data-target="#Transfer_invoice"><i
+																		class="text-warning fas fa-exchange-alt"></i>&nbsp;&nbsp;نقل الي
+																	الارشيف</a>
+		
+																<a class="dropdown-item" href="#"><i
+																		class="text-success fas fa-print"></i>&nbsp;&nbsp;طباعة
+																	الفاتورة
+																</a>
+														</div>
+													</div>
 												</td>
-												<td>{{$invoice->note}}</td>
+
 											</tr>
 											@endforeach
 										</tbody>
