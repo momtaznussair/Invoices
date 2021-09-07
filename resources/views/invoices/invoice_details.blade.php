@@ -29,7 +29,7 @@
 
         <!-- row -->
         <div class="row">
-            <div class="panel panel-primary tabs-style-2">
+            <div class="panel panel-primary tabs-style-2 col">
                 <div class=" tab-menu-heading">
                     <div class="tabs-menu1">
                         <!-- Tabs -->
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 
-                <div class="panel-body tabs-menu-body main-content-body-right border">
+                <div class="panel-body tabs-menu-body main-content-body-right border w-100">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab4">
                             <div class="table-responsive mt-15">
@@ -159,7 +159,33 @@
                         </div>
                         
                         <div class="tab-pane" id="tab6">
+
+                            {{-- add an attachment  --}}
+                            <div class="card-body">
+                                <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
+                                <h5 class="card-title">اضافة مرفقات</h5>
+                                <form method="post" action="{{ route('invoice_attachments.store') }}" 
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input"
+                                            name="attachment" required>
+                                        <input type="hidden" name="invoice_number"
+                                            value="{{ $invoice->invoice_number }}">
+                                        <input type="hidden" id="invoice_id" name="invoice_id"
+                                            value="{{ $invoice->id }}">
+                                        <label class="custom-file-label" for="customFile">حدد
+                                            المرفق</label>
+                                    </div><br><br>
+                                    <button type="submit" class="btn btn-primary btn-sm "
+                                        name="uploadedFile">تاكيد</button>
+                                </form>
+                            </div>
+                            {{--end of  add an attachment  --}}
+
+
                             <div class="table-responsive mt-15">
+                                
                                 <table class="table center-aligned-table mb-0 table table-hover" style="text-align:center">
                                     <thead>
                                         <tr class="text-dark">
@@ -218,7 +244,7 @@
 								<h6 class="modal-title">حذف المرفق</h6><button aria-label="Close" class="close" data-dismiss="modal"
 									type="button"><span aria-hidden="true">&times;</span></button>
 							</div>
-							<form action="{{route('invoice_details.destroy', 1)}}" method="post">
+							<form action="{{route('invoice_attachments.destroy', 1)}}" method="post">
 								{{ method_field('delete') }}
 								{{ csrf_field() }}
 								<div class="modal-body">

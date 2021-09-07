@@ -85,16 +85,7 @@ class InvoiceDetailsController extends Controller
      */
     public function destroy(Request $request)
     {
-        $attachment = InvoiceAttachments::findOrFail($request->attachment_id);
-        Storage::delete($attachment->file_name);
-        $attachment->delete();
-
-        session()->flash('success', 'تم حذف المرفق بنجاح');
-        return back();
+       //
     }
-
-    public function download($invoice, $attachment)
-    {
-        return Storage::download($invoice.'/'.$attachment);
-    }
+   
 }
