@@ -57,6 +57,18 @@ class InvoiceController extends Controller
     }
 
 
+     /**
+     * Display a listing of the partially paid invoices.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getArchived()
+    {
+        $invoices = Invoice::onlyTrashed()->get();
+        return view('invoices.archived_invoices', ['invoices' => $invoices]);
+    }  
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -132,9 +144,11 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show(Invoice $invoice)
+    public function show($invoice_id)
     {
-        //
+        $invoice = Invoice::withTrashed()->where('id', $invoice_id)->first();
+
+        return view('invoices.invoice', ['invoice' => $invoice]);
     }
 
     /**
@@ -206,6 +220,28 @@ class InvoiceController extends Controller
         $invoice->forceDelete();
 
         session()->flash('success', 'تم حذف الفاتورة بنجاح ');
+        return back();
+    }
+
+    public function archive(Request $request)
+    {
+        $invoice_id = $request->invoice_id;
+        $invoice = Invoice::findOrFail($invoice_id);
+
+        $invoice->Delete();
+
+        session()->flash('success', 'تم أرشفة الفاتورة بنجاح ');
+        return back();
+    }
+
+    public function restore(Request $request)
+    {
+        $invoice_id = $request->invoice_id;
+        $invoice = Invoice::withTrashed()
+        ->where('id', $invoice_id)
+        ->restore();
+
+        session()->flash('success', 'تم إستعادة الفاتورة بنجاح ');
         return back();
     }
 

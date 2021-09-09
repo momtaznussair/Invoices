@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-قائمة الفواتير
+أرشيف الفواتير 
 @stop
 @section('css')
 <!-- Internal Data table css -->
@@ -18,7 +18,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة الفواتير</span>
+							<h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/الأرشيف</span>
 						</div>
 					</div>
 				</div>	
@@ -114,28 +114,18 @@
 															class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
 															type="button">العمليات<i class="fas fa-caret-down ml-1"></i></button>
 														<div class="dropdown-menu tx-13">
-																<a class="dropdown-item"
-																	href="{{route('invoices.edit', $invoice->id)}}">تعديل
-																	الفاتورة</a>
-		
+
 																<a class="dropdown-item" href="#delete_model" data-invoice_id="{{ $invoice->id }}" data-effect="effect-scale"
 																	data-toggle="modal" data-target="#delete_modal"><i
 																		class="text-danger fas fa-trash-alt pl-2"></i>حذف
 																	الفاتورة</a>
 		
-																<a class="dropdown-item"
-																	href="{{route('invoice-status', $invoice->id)}}"><i
-																		class=" text-success fas fa-money-bill pl-2"></i>تغير
-																	حالة
-																	الدفع</a>
+                                                                <a class="dropdown-item" href="#restore_modal" data-invoice_id="{{ $invoice->id }}" data-effect="effect-scale"
+                                                                    data-toggle="modal" data-target="#restore_modal"><i
+                                                                        class="text-info fas fa-upload pl-2"></i>إستعادة
+                                                                    الفاتورة</a>
 		
-
-																<a class="dropdown-item" href="#archive_modal" data-invoice_id="{{ $invoice->id }}" data-effect="effect-scale"
-																	data-toggle="modal" data-target="#archive_modal"><i
-																	class="text-warning fas fa-exchange-alt pl-2"></i>نقل إلى الأرشيف
-																</a>
-		
-																<a class="dropdown-item" href="{{route('invoices.show', $invoice->id)}}"><i
+																<a class="dropdown-item" href="#"><i
 																		class="text-success fas fa-print pl-2"></i>طباعة
 																	الفاتورة
 																</a>
@@ -151,6 +141,7 @@
 							</div>
 						</div>
 					</div>
+
 					
 					 {{-- delete modal --}}
 					 <div class="modal" id="delete_modal">
@@ -177,29 +168,29 @@
 					</div>
 					{{-- end of delete modal --}}
 
-					 {{-- archive modal --}}
-					 <div class="modal" id="archive_modal">
+                     {{-- restore modal --}}
+					 <div class="modal" id="restore_modal">
 						<div class="modal-dialog modal-dialog-centered" role="document">
 							<div class="modal-content modal-content-demo">
 								<div class="modal-header">
-									<h6 class="modal-title">أرشفة الفاتورة</h6><button aria-label="Close" class="close"
+									<h6 class="modal-title">إستعادة الفاتورة</h6><button aria-label="Close" class="close"
 										data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
 								</div>
-								<form action="{{route('archive-invoices')}}" method="post">
+								<form action="{{route('restore-invoices')}}" method="post">
 									@csrf
 									<div class="modal-body">
-										<p>هل انت متاكد من عملية الأرشفة ؟</p><br>
-										<input type="hidden" name="invoice_id" id="archive_invoice_id" value="">
+										<p>هل انت متاكد من عملية الإستعادة ؟</p><br>
+										<input type="hidden" name="invoice_id" id="restore_invoice_id" value="">
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-										<button type="submit" class="btn btn-warning">تاكيد</button>
+										<button type="submit" class="btn btn-success">تاكيد</button>
 									</div>
 							</div>
 							</form>
 						</div>
 					</div>
-					{{-- end of archive modal --}}
+					{{-- end of restore modal --}}
 			
 					
 				</div>
@@ -214,21 +205,21 @@
 {{-- delete an invoice --}}
 <script>
 	$('#delete_modal').on('show.bs.modal', function(event) {
-            let button = $(event.relatedTarget);
-            let invoice_id = button.data('invoice_id');
-            let modal = $(this);
+            let button = $(event.relatedTarget)
+            let invoice_id = button.data('invoice_id')
+            let modal = $(this)
             modal.find('.modal-body #invoice_id').val(invoice_id);
         })
 </script>
 
+{{-- restore an invoice --}}
 <script>
-	$('#archive_modal').on('show.bs.modal', function(event){
-		let button = $(event.relatedTarget);
-		let invoice_id = button.data('invoice_id');
-		let modal = $(this);
-
-		modal.find('.modal-body #archive_invoice_id ').val(invoice_id);
-	})
+	$('#restore_modal').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget)
+            let invoice_id = button.data('invoice_id')
+            let modal = $(this)
+            modal.find('.modal-body #restore_invoice_id').val(invoice_id);
+        })
 </script>
 
 <!-- Internal Data tables -->
