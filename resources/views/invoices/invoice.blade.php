@@ -1,5 +1,12 @@
 @extends('layouts.master')
 @section('css')
+	<style>
+		@media print {
+			#print_button{
+				display: none;
+			}
+		}
+	</style>
 @endsection
 @section('title')
     معاينة الفاتورة
@@ -19,16 +26,16 @@
 				<!-- row -->
 				<div class="row row-sm">
 					<div class="col-md-12 col-xl-12">
-						<div class=" main-content-body-invoice">
+						<div class="main-content-body-invoice">
 							<div class="card card-invoice">
-								<div class="card-body">
+								<div class="card-body" id="printContent">
 									<div class="invoice-header">
 										<h1 class="invoice-title">فاتورة تحصيل</h1>
 										<div class="billed-from">
-											<h6>BootstrapDash, Inc.</h6>
-											<p>201 Something St., Something Town, YT 242, Country 6546<br>
-											Tel No: 324 445-4544<br>
-											Email: youremail@companyname.com</p>
+											<h6>MomtazNussair, Inc.</h6>
+											<p>201 dev St., faraskour, Damietta, Egypt<br>
+											Tel No: +2 1015 447-889<br>
+											Email: momtaznussair97@gmail.com</p>
 										</div><!-- billed-from -->
 									</div><!-- invoice-header -->
 									<div class="row mg-t-20">
@@ -53,28 +60,30 @@
 										<table class="table table-invoice border text-md-nowrap mb-0">
 											<thead>
 												<tr>
-													<th class="wd-20p">المنتج</th>
-													<th class="wd-40p">مبلغ التحصيل</th>
-													<th class="tx-center">العمولة</th>
+													<th class="" colspan="2">المنتج</th>
+													<th class="">مبلغ التحصيل</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<td>{{$invoice->product->product_name}}</td>
+													<td colspan="2">{{$invoice->product->product_name}}</td>
 													<td class="tx-12">{{"$".$invoice->Amount_collection}}</td>
-													<td class="tx-center">{{"$".$invoice->Amount_Commission}}</td>
 												</tr>
 												<tr>
-													<td class="valign-middle" colspan="2" rowspan="4">
+													<td class="valign-middle" colspan="2" rowspan="5">
 														<div class="invoice-notes">
-															<label class="main-content-label tx-13">Notes</label>
+															<label class="main-content-label tx-13">ملاحظات</label>
 															<p class="text-dark">{{$invoice->note}}</p>
 														</div><!-- invoice-notes -->
 													</td>
-                                                    <td class="tx-right">الخصم</td>
-                                                    <td class="tx-right" colspan="2">{{"$".$invoice->Discount }}</td>
+
+                                                    <th class="tx-right">العمولة</th>
+													<td class="">{{"$".$invoice->Amount_Commission}}</td>
 												</tr>
-												
+												<tr>
+                                                    <th class="tx-right">الخصم</th>
+                                                    <td class="tx-right" colspan="2">{{"$".$invoice->Discount }}</td>
+                                                </tr>
                                                 <tr>
 													<td class="tx-right">العمولة بعد الخصم</td>
 													<td class="tx-right" colspan="2">{{"$". ($invoice->Amount_Commission -  $invoice->Discount) }}</td>
@@ -93,14 +102,8 @@
 										</table>
 									</div>
 									<hr class="mg-b-40">
-									<a class="btn btn-purple float-left mt-3 mr-2" href="">
-										<i class="mdi mdi-currency-usd ml-1"></i>Pay Now
-									</a>
-									<a href="#" class="btn btn-danger float-left mt-3 mr-2">
+									<a href="#" class="btn btn-danger float-left ml-5 mb-1" id="print_button" onclick="printInvoice()">
 										<i class="mdi mdi-printer ml-1"></i>Print
-									</a>
-									<a href="#" class="btn btn-success float-left mt-3">
-										<i class="mdi mdi-telegram ml-1"></i>Send Invoice
 									</a>
 								</div>
 							</div>
@@ -116,4 +119,17 @@
 @section('js')
 <!--Internal  Chart.bundle js -->
 <script src="{{URL::asset('assets/plugins/chart.js/Chart.bundle.min.js')}}"></script>
+<script>
+	// $(document).ready(function () {
+
+		function printInvoice() {
+		let content = document.getElementById('printContent').innerHTML;
+		let WholePage = document.body.innerHTML;
+		document.body.innerHTML = content;
+		window.print();
+		document.body.innerHTML = WholePage;
+		location.reload();
+	}		
+	// });
+</script>
 @endsection
