@@ -36,6 +36,15 @@ Route::resource('statuses', InvoiceStatusController::class);
 
 Route::resource('invoice_details', InvoiceDetailsController::class);
 Route::resource('invoice_attachments', InvoiceAttachmentsController::class);
+// change invoice payment status
+Route::get('invoice-status/{invoice_id}', [InvoiceStatusController::class, 'invoice_status'])->name('invoice-status');
+Route::post('change-invoice-status', [InvoiceStatusController::class, 'change_invoice_status'])->name('change-invoice-status');
+
+// get invoices by status
+Route::get('paid-invoices', [InvoiceController::class, 'getPaid'])->name('paid-invoices');
+Route::get('unpaid-invoices', [InvoiceController::class, 'getUnpaid'])->name('unpaid-invoices');
+Route::get('partially-paid-invoices', [InvoiceController::class, 'getPartiallyPaid'])->name('partially-paid-invoices');
+
 
 Route::get('download/{invoice}/{attachment}', [InvoiceAttachmentsController::class, 'download']);
 

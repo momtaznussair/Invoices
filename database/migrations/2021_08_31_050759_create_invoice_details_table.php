@@ -22,6 +22,7 @@ class CreateInvoiceDetailsTable extends Migration
             $table->date('Payment_Date')->nullable();
             $table->text('note')->nullable();
             $table->string('created_by',300);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

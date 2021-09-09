@@ -25,6 +25,7 @@ class Invoice extends Model
         'status_id',
         'note',
         'created_by',
+        'Payment_Date',
     ];
 
     public function status()

@@ -23,6 +23,41 @@ class InvoiceController extends Controller
         return view('invoices.invoices', ['invoices' => $invoices]);
     }
 
+     /**
+     * Display a listing of the paid invoices.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getPaid()
+    {
+        $invoices = Invoice::where('status_id', 2)->get();
+        return view('invoices.paid_invoices', ['invoices' => $invoices]);
+    }
+
+     /**
+     * Display a listing of the unpaid invoices.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUnpaid()
+    {
+        $invoices = Invoice::where('status_id', 0)->get();
+        return view('invoices.unpaid_invoices', ['invoices' => $invoices]);
+    }
+
+     /**
+     * Display a listing of the partially paid invoices.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getPartiallyPaid()
+    {
+        $invoices = Invoice::where('status_id', 1)->get();
+        return view('invoices.partial_paid_invoices', ['invoices' => $invoices]);
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -86,7 +121,7 @@ class InvoiceController extends Controller
                     ]);
                 }
             }
-            session()->flash('Add', 'تم اضافة  الفاتورة بنجاح ');
+            session()->flash('success', 'تم اضافة  الفاتورة بنجاح ');
             return back();
         }
     }
@@ -166,7 +201,9 @@ class InvoiceController extends Controller
     {
         $invoice_id = $request->invoice_id;
         $invoice = Invoice::findOrFail($invoice_id);
-        $invoice->delete();
+        //delete attachments
+        Storage::deleteDirectory($invoice->invoice_number);
+        $invoice->forceDelete();
 
         session()->flash('success', 'تم حذف الفاتورة بنجاح ');
         return back();

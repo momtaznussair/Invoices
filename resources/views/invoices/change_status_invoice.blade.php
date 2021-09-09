@@ -10,13 +10,11 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css') }}">
     <!--Internal  TelephoneInput css-->
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css') }}">
-    <!--Internal   Notify -->
-    <link href="{{ URL::asset('assets/plugins/notify/css/notifIt.css') }}" rel="stylesheet" />
-
-
+        <!--Internal   Notify -->
+    <link href="{{URL::asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet"/>
 @endsection
 @section('title')
-    اضافة فاتورة
+   تعديل حالة الدفع
 @stop
 
 @section('page-header')
@@ -25,7 +23,7 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    اضافة فاتورة</span>
+                    تعديل حالة الدفع</span>
             </div>
         </div>
     </div>
@@ -33,26 +31,26 @@
 @endsection
 @section('content')
 
-    {{-- store errors --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     {{-- success message --}}
     @if (session()->has('success'))
         <script>
             window.onload = function() {
-                notif({
-                    msg: "{{ session()->get('success') }}",
-                    type: "success"
-                })
+            notif({
+                msg: "{{session()->get('success')}}",
+                type: "success"
+            })
             }
         </script>
+    @endif
+    {{--  errors --}}
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
     <!-- row -->
     <div class="row">
@@ -60,82 +58,81 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('invoices.store') }}" method="post" enctype="multipart/form-data"
+                    <form action="{{ route('change-invoice-status')}}" method="post" enctype="multipart/form-data"
                         autocomplete="off">
-                        {{ csrf_field() }}
+                        @csrf
                         {{-- 1 --}}
 
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col">
-                                <label for="invoiceNumber" class="control-label"><span class="tx-danger">*</span> رقم الفاتورة </label>
-                                <input type="text" class="form-control" id="invoiceNumber" name="invoice_number"
-                                    title="يرجي ادخال رقم الفاتورة" required>
+                                <label for="invoiceNumber" class="control-label">رقم الفاتورة</label>
+                                <input type="text" class="form-control" id="invoiceNumber"  value="{{$invoice->invoice_number}}"
+                                    title="يرجي ادخال رقم الفاتورة" readonly>
                             </div>
 
                             <div class="col">
-                                <label><span class="tx-danger">*</span> تاريخ الفاتورة</label>
-                                <input class="form-control fc-datepicker" name="invoice_Date" placeholder="YYYY-MM-DD"
-                                    type="text" value="{{ date('Y-m-d') }}" required>
+                                <label>تاريخ الفاتورة</label>
+                                <input class="form-control fc-datepicker"  placeholder="YYYY-MM-DD"
+                                    type="text" value="{{ $invoice->invoice_Date }}" readonly>
                             </div>
 
                             <div class="col">
-                                <label><span class="tx-danger">*</span> تاريخ الاستحقاق</label>
-                                <input class="form-control fc-datepicker" name="Due_date" placeholder="YYYY-MM-DD"
-                                    type="text" required>
+                                <label>تاريخ الاستحقاق</label>
+                                <input class="form-control fc-datepicker"  placeholder="YYYY-MM-DD" value="{{ $invoice->Due_date }}"
+                                    type="text" readonly>
                             </div>
 
                         </div>
 
                         {{-- 2 --}}
-                        <div class="row">
+                        <div class="row mb-1">
+
                             <div class="col">
-                                <label for="inputName" class="control-label"><span class="tx-danger">*</span> القسم</label>
-                                <select name="Section" class="form-control SlectBox" required>
-                                    <!--placeholder-->
-                                    <option value="" selected disabled>حدد القسم</option>
-                                    @foreach ($sections as $section)
-                                        <option value="{{ $section->id }}"> {{ $section->section_name }}</option>
-                                    @endforeach
+                                <label for="inputName" class="control-label">القسم</label>
+                                <select id="section" name="section_id" class="form-control" disabled>
+                                    <option value="{{ $invoice->product->section->id }}" selected> {{ $invoice->product->section->section_name }}</option>
+                                </select>
+                            </div>
+
+
+                            <div class="col">
+                                <label for="inputName" class="control-label">المنتج</label>
+                                <select id="product_id"  class="form-control" disabled>
+                                    <option value="{{ $invoice->product->id }}" selected> {{ $invoice->product->product_name }}</option>
                                 </select>
                             </div>
 
                             <div class="col">
-                                <label for="inputName" class="control-label"><span class="tx-danger">*</span> المنتج</label>
-                                <select id="product_id" name="product_id" class="form-control" required>
-                                </select>
-                            </div>
-
-                            <div class="col">
-                                <label for="inputName" class="control-label"><span class="tx-danger">*</span> مبلغ التحصيل</label>
-                                <input type="text" class="form-control" id="inputName" name="Amount_collection"
-                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+                                <label for="inputName" class="control-label">مبلغ التحصيل</label>
+                                <input type="text" class="form-control" id="inputName"  value="{{$invoice->Amount_collection}}"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" readonly>
                             </div>
                         </div>
 
 
                         {{-- 3 --}}
 
-                        <div class="row">
+                        <div class="row mb-1">
 
                             <div class="col">
-                                <label for="inputName" class="control-label"><span class="tx-danger">*</span> مبلغ العمولة</label>
-                                <input type="text" class="form-control form-control-lg" id="Amount_Commission"
-                                    name="Amount_Commission" title="يرجي ادخال مبلغ العمولة "
+                                <label for="inputName" class="control-label">مبلغ العمولة</label>
+                                <input type="text" class="form-control form-control-lg" id="Amount_Commission" value="{{$invoice->Amount_Commission}}"
+                                     title="يرجي ادخال مبلغ العمولة "
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                    required>
+                                    readonly>
                             </div>
 
                             <div class="col">
-                                <label for="inputName" class="control-label"><span class="tx-danger">*</span> الخصم</label>
-                                <input type="text" class="form-control form-control-lg" id="Discount" name="Discount"
+                                <label for="inputName" class="control-label">الخصم</label>
+                                <input type="text" class="form-control form-control-lg" id="Discount"  value="{{$invoice->Discount}}"
                                     title="يرجي ادخال مبلغ الخصم "
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                    value="0" required>
+                                    value=0 readonly>
                             </div>
 
                             <div class="col">
-                                <label for="inputName" class="control-label"><span class="tx-danger">*</span> نسبة ضريبة القيمة المضافة</label>
-                                <select name="Rate_VAT" id="Rate_VAT" class="form-control" onchange="getTotal()" required>
+                                <label for="inputName" class="control-label">نسبة ضريبة القيمة المضافة</label>
+                                <select  id="Rate_VAT" class="form-control" onchange="getTotal()" disabled>
                                     <!--placeholder-->
                                     <option value="" selected disabled>حدد نسبة الضريبة</option>
                                     <option value="5">5%</option>
@@ -150,15 +147,15 @@
 
                         {{-- 4 --}}
 
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col">
                                 <label for="inputName" class="control-label">قيمة ضريبة القيمة المضافة</label>
-                                <input type="text" class="form-control" id="Value_VAT" name="Value_VAT" readonly required>
+                                <input type="text" class="form-control" id="Value_VAT"  readonly>
                             </div>
 
                             <div class="col">
                                 <label for="inputName" class="control-label">الاجمالي شامل الضريبة</label>
-                                <input type="text" class="form-control" id="Total" name="Total" readonly required>
+                                <input type="text" class="form-control" id="Total"  readonly>
                             </div>
                         </div>
 
@@ -166,20 +163,44 @@
                         <div class="row">
                             <div class="col">
                                 <label for="exampleTextarea">ملاحظات</label>
-                                <textarea class="form-control" id="exampleTextarea" name="note" rows="3"></textarea>
+                                <textarea class="form-control" id="exampleTextarea"  rows="3" readonly>{{$invoice->note}}</textarea>
                             </div>
                         </div><br>
 
-                        <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
-                        <h5 class="card-title">المرفقات</h5>
+                        {{-- 6- change status --}}
+                        <div class="row justify-content-center mb-2">
+                            {{-- payment status --}}
+                            <div class="col-4">
+                                <label for="status" class="control-label">حالة الدفع</label>
+                                <select id="status" name="status_id" class="form-control">
+                                    <option value="{{ $invoice->status->id }}" selected> {{ $invoice->status->status_name }}</option>
+                                    @foreach ($statuses as $status)
+                                        @if($status->id != $invoice->status->id)
+                                            <option value="{{ $status->id }}"> {{ $status->status_name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="hidden" name="invoice_id" value="{{$invoice->id}}">
+                            {{-- payment date --}}
+                            <div class="col-4">
+                                <label>تاريخ الدفع</label>
+                                <input class="form-control fc-datepicker" name="payment_date"
+                                    type="text" value="{{ date('Y-m-d') }}" required>
+                            </div>
 
-                        <div class="col-sm-12 col-md-12">
-                            <input type="file" name="attachment" class="dropify"
-                                accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
-                        </div><br>
+                            <div class="col-4">
+                                <label>ملاحظات</label>
+                                <input class="form-control" name="note"
+                                    type="text">
+                            </div>
+                            
 
+                        </div>
+
+                        {{-- submit --}}
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">حفظ البيانات</button>
+                            <button type="submit" class="btn btn-primary">تغيير حالة الدفع</button>
                         </div>
 
 
@@ -222,41 +243,23 @@
     <script src="{{ URL::asset('assets/plugins/spectrum-colorpicker/spectrum.js') }}"></script>
     <!-- Internal form-elements js -->
     <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
-    <!--Internal  Notify js -->
-    <script src="{{ URL::asset('assets/plugins/notify/js/notifIt.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/notify/js/notifit-custom.js') }}"></script>
 
     <script>
-        var date = $('.fc-datepicker').datepicker({
+        let date = $('.fc-datepicker').datepicker({
             dateFormat: 'yy-mm-dd'
         }).val();
     </script>
 
     <script>
         $(document).ready(function() {
-            $('select[name="Section"]').on('change', function() {
-                let SectionId = $(this).val();
-                if (SectionId) {
-                    $.ajax({
-                        url: "{{ URL::to('section') }}/" + SectionId,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('select[name="product_id"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="product_id"]').append(
-                                    '<option value="' +
-                                    value.id + '">' + value.product_name +
-                                    '</option>');
-                            });
-                        },
-                    });
-                } else {
-                    console.log('AJAX load did not work');
-                }
-            });
+
+            // selecting current vat rate
+            $(`select[id="Rate_VAT"]>option[value="{{$invoice->Rate_VAT}}"]`).prop('selected', true);
+             // get current commission after discount and tax
+            getTotal();
         });
     </script>
+
 
 
     <script>
@@ -279,6 +282,7 @@
             }
         }
     </script>
-
-
+    <!--Internal  Notify js -->
+  <script src="{{URL::asset('assets/plugins/notify/js/notifIt.js')}}"></script>
+  <script src="{{URL::asset('assets/plugins/notify/js/notifit-custom.js')}}"></script>
 @endsection

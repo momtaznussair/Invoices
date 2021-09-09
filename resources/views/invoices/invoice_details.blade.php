@@ -18,15 +18,24 @@
 @endsection
 @section('content')
 
-@if (session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{ session()->get('success') }}</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-@endif
-
+        @if (session()->has('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{ session()->get('success') }}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+        @endif
+        {{-- store errors --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <!-- row -->
         <div class="row">
             <div class="panel panel-primary tabs-style-2 col">
@@ -147,7 +156,7 @@
                                                             class="badge badge-pill badge-warning">{{ $detail->status->status_name }}</span>
                                                     </td>
                                                 @endif
-                                                <td>{{ $detail->Payment_Date ?? '--' }}</td>
+                                                <td>{{ $detail->Payment_Date }}</td>
                                                 <td>{{ $detail->note ?? '--' }}</td>
                                                 <td>{{ $detail->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $detail->created_by }}</td>
