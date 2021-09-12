@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class InvoiceAttachmentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:add invoice attachment', ['only' => ['create','store']]);
+        $this->middleware('permission:delete invoice attachment', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

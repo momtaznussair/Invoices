@@ -8,8 +8,20 @@
 @section('css')
 <!-- Sidemenu-respoansive-tabs css -->
 <link href="{{URL::asset('assets/plugins/sidemenu-responsive-tabs/css/sidemenu-responsive-tabs.css')}}" rel="stylesheet">
+<!--Internal   Notify -->
+<link href="{{URL::asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet"/>
 @endsection
 @section('content')
+@if (session()->has('suspended'))
+<script>
+	 window.onload = function() {
+		notif({
+			msg: "{{session()->get('suspended')}}",
+			type: "error"
+		})
+		}
+</script>
+@endif
 		<div class="container-fluid">
 			<div class="row no-gutter">
 				<!-- The image half -->
@@ -85,4 +97,7 @@
 		</div>
 @endsection
 @section('js')
+<!--Internal  Notify js -->
+<script src="{{URL::asset('assets/plugins/notify/js/notifIt.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/notify/js/notifit-custom.js')}}"></script>
 @endsection

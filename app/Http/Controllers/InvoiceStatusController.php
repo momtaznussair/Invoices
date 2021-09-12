@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class InvoiceStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:statuses', ['only' => ['index']]);
+        $this->middleware('permission:add status', ['only' => ['create','store']]);
+        $this->middleware('permission:edit status', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete status', ['only' => ['destroy']]);
+        $this->middleware('permission:change invoice status', ['only' => ['invoice_status', 'change_invoice_status']]);
+
+    }
     /**
      * Display a listing of the resource.
      *

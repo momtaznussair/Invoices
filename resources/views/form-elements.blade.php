@@ -164,7 +164,7 @@
 									<div class="col-lg">
 										<input class="form-control form-control-sm mg-b-20" placeholder="Input sm box" type="text">
 										<input class="form-control mg-b-20" placeholder="Input box" type="text">
-										<input class="form-control form-control-lg" placeholder="Input lg box" type="text">
+										<input class="form-control form-control-lg" plapermissionspermissionspermissionsceholder="Input lg box" type="text">
 									</div>
 								</div>
 							</div>
@@ -207,8 +207,7 @@
 								<div class="main-content-label mg-b-5">
 									Custom Checkboxes &amp; Radios
 								</div>
-								<p class="mg-b-20">It is Very Easy to Customize and it uses in your website apllication.</p>
-								<div class="row">
+								<p class="mg-b-20">It is Very Easy to Customize and it uses in your websitepermissions
 									<div class="col-lg-3">
 										<label class="ckbox"><input type="checkbox"><span>Checkbox Unchecked</span></label>
 									</div>

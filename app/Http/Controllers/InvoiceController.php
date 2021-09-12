@@ -2,16 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoicesExport;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachments;
 use App\Models\InvoiceDetails;
 use App\Models\Section;
+use App\Models\User;
+use App\Notifications\AddInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:list invoices', ['only' => ['index']]);
+        $this->middleware('permission:view invoice details', ['only' => ['show']]);
+        $this->middleware('permission:add invoice', ['only' => ['create','store', 'getProducts']]);
+        $this->middleware('permission:edit invoice', ['only' => ['edit','update', 'getProducts']]);
+        $this->middleware('permission:delete invoice', ['only' => ['destroy']]);
+
+        $this->middleware('permission:paid invoices', ['only' => ['getPaid']]);
+        $this->middleware('permission:unpaid invoices', ['only' => ['getUnpaid']]);
+        $this->middleware('permission:partially paid invoices', ['only' => ['getPartiallyPaid']]);
+        $this->middleware('permission:invoices archive', ['only' => ['getArchived']]);
+        $this->middleware('permission:archive invoice', ['only' => ['archive', 'restore']]);
+        $this->middleware('permission:export invoice', ['only' => ['export']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -108,7 +128,7 @@ class InvoiceController extends Controller
         if ($validator)
         {
             $valid_request = $request->all();
-            $valid_request['status_id'] = 0;
+            $valid_request['status_id'] = 1;
             $valid_request['created_by'] = Auth::user()->name;
 
             $invoice = Invoice::create($valid_request);
@@ -133,6 +153,10 @@ class InvoiceController extends Controller
                     ]);
                 }
             }
+            
+            $user = User::first();
+            $user->notify(new AddInvoice($invoice->id));
+
             session()->flash('success', 'تم اضافة  الفاتورة بنجاح ');
             return back();
         }
@@ -252,5 +276,10 @@ class InvoiceController extends Controller
         if ($section) {
             return response()->json($section->products);
         }
+    }
+
+    public function export() 
+    {
+        return Excel::download(new InvoicesExport, 'invoices.xlsx');
     }
 }

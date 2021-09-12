@@ -147,7 +147,6 @@
                                 <label for="inputName" class="control-label">نسبة ضريبة القيمة المضافة</label>
                                 <select name="Rate_VAT" id="Rate_VAT" class="form-control" onchange="getTotal()">
                                     <!--placeholder-->
-                                    <option value="" selected disabled>حدد نسبة الضريبة</option>
                                     <option value="5">5%</option>
                                     <option value="7">7%</option>
                                     <option value="10">10%</option>

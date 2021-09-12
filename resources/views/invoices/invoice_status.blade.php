@@ -56,7 +56,9 @@
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
 									<div class="col-sm-6 col-md-4 col-xl-3">
-										<a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale" data-toggle="modal" href="#modaldemo8">اضافة حالة</a>
+										@can('add status')
+											<a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale" data-toggle="modal" href="#modaldemo8">اضافة حالة</a>
+										@endcan
 									</div>
 								</div>
 							</div>
@@ -78,15 +80,19 @@
 												<td>{{$status->status_name}}</td>
 												<td>{{$status->description}}</td>
 												<td>
-													<a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
-													data-id="{{ $status->id }}" data-status_name="{{ $status->status_name }}"
-													data-description="{{ $status->description }}" data-toggle="modal"
-													href="#exampleModal2" title="تعديل"><i class="las la-pen"></i></a>
-
-													<a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-													data-id="{{ $status->id }}" data-status_name="{{ $status->status_name }}"
-													data-toggle="modal" href="#modaldemo9" title="حذف"><i
-														class="las la-trash"></i></a>
+													@can('edit status')
+														<a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+														data-id="{{ $status->id }}" data-status_name="{{ $status->status_name }}"
+														data-description="{{ $status->description }}" data-toggle="modal"
+														href="#exampleModal2" title="تعديل"><i class="las la-pen"></i></a>	
+													@endcan
+													
+													@can('delete status')
+														<a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+														data-id="{{ $status->id }}" data-status_name="{{ $status->status_name }}"
+														data-toggle="modal" href="#modaldemo9" title="حذف"><i
+															class="las la-trash"></i></a>
+													@endcan
 												</td>
 											</tr>
 											@endforeach

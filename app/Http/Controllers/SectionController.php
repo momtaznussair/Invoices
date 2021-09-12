@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:sections|add product|edit product', ['only' => ['index']]);
+        $this->middleware('permission:add section', ['only' => ['create','store']]);
+        $this->middleware('permission:edit section', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete section', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -39,7 +46,7 @@ class SectionController extends Controller
     {
         $validator = $request->validate([
             'section_name' => 'required|unique:sections,section_name|max:999',
-            'description' => 'string',
+            'description' => 'nullable|string',
         ],
         [
             'section_name.required' => 'يرجي ادخال اسم القسم',
@@ -94,7 +101,7 @@ class SectionController extends Controller
         $id = $request->id;
         $validator = $request->validate([
             'section_name' => "required|max:255|unique:sections,section_name,". $id,
-            'description' => 'string',
+            'description' => 'nullable|string',
         ],
         [
             'section_name.required' => 'يرجي ادخال اسم القسم',

@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Storage;
 
 class InvoiceDetailsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view invoice details', ['only' => ['show']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -73,8 +73,10 @@
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between">
                         <div class="col-sm-6 col-md-4 col-xl-3">
-                            <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
-                                data-toggle="modal" href="#add_modal">اضافة منتج</a>
+                            @can('add product')
+                                <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
+                                data-toggle="modal" href="#add_modal">اضافة منتج</a>     
+                            @endcan                           
                         </div>
                     </div>
                 </div>
@@ -98,17 +100,21 @@
                                         <td>{{ $product->section->section_name }}</td>
                                         <td>{{ $product->description }}</td>
                                         <td>
-                                            <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+                                            @can('edit product')
+                                                <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
                                                 data-pro_id="{{ $product->id }}"
                                                 data-product_name="{{ $product->product_name }}"
                                                 data-section_id="{{ $product->section->id }}"
                                                 data-description="{{ $product->description }}" data-toggle="modal"
                                                 href="#edit_modal" title="تعديل"><i class="las la-pen"></i></a>
-
-                                            <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+                                            @endcan
+                                            
+                                            @can('delete product')
+                                                <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
                                                 data-id="{{ $product->id }}"
                                                 data-product_name="{{ $product->product_name }}" data-toggle="modal"
-                                                href="#delete_modal" title="حذف"><i class="las la-trash"></i></a>
+                                                href="#delete_modal" title="حذف"><i class="las la-trash"></i></a>     
+                                            @endcan                                           
                                         </td>
                                     </tr>
                                 @endforeach
@@ -192,7 +198,7 @@
                                 @foreach ($sections as $section)
                                     <option value="{{ $section->id }}">{{ $section->section_name }}</option>
                                 @endforeach
-                            </select>section_name
+                            </select>
 
                             <div class="form-group">
                                 <label for="des">ملاحظات :</label>

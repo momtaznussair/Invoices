@@ -44,8 +44,13 @@
                         <!-- Tabs -->
                         <ul class="nav panel-tabs main-nav-line">
                             <li><a href="#tab4" class="nav-link active" data-toggle="tab">معلومات الفاتورة</a></li>
-                            <li><a href="#tab5" class="nav-link" data-toggle="tab">تفاصيل الفاتورة</a></li>
-                            <li><a href="#tab6" class="nav-link" data-toggle="tab">مرفقات الفاتورة</a></li>
+                            @can('view invoice details')
+                                <li><a href="#tab5" class="nav-link" data-toggle="tab">تفاصيل الفاتورة</a></li>
+                            @endcan
+                            
+                            @can('view invoice attachment')
+                                <li><a href="#tab6" class="nav-link" data-toggle="tab">مرفقات الفاتورة</a></li>
+                            @endcan
                         </ul>
                     </div>
                 </div>
@@ -97,11 +102,11 @@
     
                                             <th scope="row">الحالة الحالية</th>
     
-                                            @if ($invoice->status_id == 2)
+                                            @if ($invoice->status_id == 3)
                                                 <td>
                                                     <span class="badge badge-pill badge-success">{{ $invoice->status->status_name }}</span>
                                                 </td>
-                                            @elseif($invoice->status_id == 0)
+                                            @elseif($invoice->status_id == 1)
                                                 <td>
                                                     <span class="badge badge-pill badge-danger">{{ $invoice->status->status_name }}</span>
                                                 </td>
@@ -143,11 +148,11 @@
                                         @foreach ($invoice->details as $index => $detail)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                @if ($detail->status_id == 2)
+                                                @if ($detail->status_id == 3)
                                                     <td><span
                                                             class="badge badge-pill badge-success">{{ $detail->status->status_name }}</span>
                                                     </td>
-                                                @elseif($detail->status_id == 0)
+                                                @elseif($detail->status_id == 1)
                                                     <td><span
                                                             class="badge badge-pill badge-danger">{{ $detail->status->status_name }}</span>
                                                     </td>
@@ -156,7 +161,7 @@
                                                             class="badge badge-pill badge-warning">{{ $detail->status->status_name }}</span>
                                                     </td>
                                                 @endif
-                                                <td>{{ $detail->Payment_Date }}</td>
+                                                <td>{{ $detail->Payment_Date ?? '--' }}</td>
                                                 <td>{{ $detail->note ?? '--' }}</td>
                                                 <td>{{ $detail->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $detail->created_by }}</td>
@@ -171,6 +176,7 @@
 
                             {{-- add an attachment  --}}
                             <div class="card-body">
+                                @can('add invoice attachment')
                                 <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
                                 <h5 class="card-title">اضافة مرفقات</h5>
                                 <form method="post" action="{{ route('invoice_attachments.store') }}" 
@@ -189,6 +195,7 @@
                                     <button type="submit" class="btn btn-primary btn-sm "
                                         name="uploadedFile">تاكيد</button>
                                 </form>
+                                @endcan
                             </div>
                             {{--end of  add an attachment  --}}
 
@@ -218,16 +225,19 @@
                                                         href="{{ url(asset('attachments')) }}/{{ $attachment->file_name }}"
                                                         role="button" target="_blank"><i class="fas fa-eye"></i>&nbsp;
                                                         عرض</a>
-    
-                                                    <a class="btn btn-outline-info btn-sm"
+                                                    @can('download invoice attachment')
+                                                        <a class="btn btn-outline-info btn-sm"
                                                         href="{{ url('download') }}/{{ $attachment->file_name }}"
                                                         role="button"><i class="fas fa-download"></i>&nbsp;
                                                         تحميل</a>
-    
-                                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                                                    @endcan
+
+                                                    @can('delete invoice attachment')
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal"
                                                         data-attachment_id="{{ $attachment->id }}"
                                                         data-target="#delete_file">
                                                         حذف</button>
+                                                    @endcan                                                  
     
                                                 </td>
                                             </tr>
