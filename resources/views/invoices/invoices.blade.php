@@ -86,7 +86,8 @@
 											<tr class="text-center">
 												<td>{{$index + 1}}</td>
 												<td>
-													<a href="{{route('invoice_details.show', $invoice->id)}}">{{ $invoice->invoice_number }}</a>
+													@can('view invoice details') <a href="{{route('invoice_details.show', $invoice->id)}}
+													"> @endcan {{ $invoice->invoice_number }}</a>
 												</td>
 												<td>{{$invoice->invoice_Date}}</td>
 												<td>{{$invoice->Due_date}}</td>
