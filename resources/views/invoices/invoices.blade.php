@@ -25,7 +25,7 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
-				 {{-- store errors --}}
+				 {{--  errors --}}
 				 @if ($errors->any())
 					<div class="alert alert-danger">
 						<ul>

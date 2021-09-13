@@ -6,6 +6,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\InvoiceStatusController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
@@ -63,6 +64,15 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('/section/{id}', [InvoiceController::class, 'getProducts']);
 
+    //reports
+
+    // invoices
+    Route::get('invoices-reports', [ReportController::class, 'invoices'])->name('invoices-reports');
+    Route::post('search-invoices', [ReportController::class, 'searchInvoices'])->name('search-invoices');
+
+    // sections
+    Route::get('customers-reports', [ReportController::class, 'customers'])->name('customers-reports');
+    Route::post('search-customers', [ReportController::class, 'searchCustomers'])->name('search-customers');
 
     });
 
