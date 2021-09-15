@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\InvoiceAdded;
 use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -72,5 +73,10 @@ class AddInvoice extends Notification
             'title'=> 'تم إضافة فاتورة',
             'user' => Auth::user()->name,
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new InvoiceAdded($this->invoice->id, Auth::user()->name, 'تم إضافة فاتورة');
     }
 }

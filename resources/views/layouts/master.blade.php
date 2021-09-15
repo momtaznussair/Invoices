@@ -31,3 +31,17 @@
 				@include('layouts.footer-scripts')	
 	</body>
 </html>
+<script src="//js.pusher.com/3.1/pusher.min.js"></script>
+
+<script>
+	var pusher = new Pusher('0b574390ade5ca5bdc65', {
+        encrypted: true,
+		cluster : 'eu'
+      });
+	var channel = pusher.subscribe('invoice');
+
+	channel.bind('App\\Events\\InvoiceAdded', function(data) {
+		console.log(data);
+		console.log('data');
+	});
+</script>

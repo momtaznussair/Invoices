@@ -10,18 +10,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class InvoiceAdded
+class InvoiceAdded implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $invoice_id;
+    public $user;
+    public $title;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($invoice_id, $user, $title)
     {
-        //
+        $this->invoice_id = $invoice_id;
+        $this->user = $user;
+        $this->title = $title;
     }
 
     /**
@@ -31,6 +36,6 @@ class InvoiceAdded
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('invoice');
     }
 }
