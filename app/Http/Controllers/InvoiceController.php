@@ -6,6 +6,7 @@ use App\Exports\InvoicesExport;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachments;
 use App\Models\InvoiceDetails;
+use App\Models\Permission;
 use App\Models\Section;
 use App\Models\User;
 use App\Notifications\AddInvoice;
@@ -115,12 +116,12 @@ class InvoiceController extends Controller
             'invoice_Date' => 'required|date',
             'Due_date' => 'required|date',
             'product_id' => 'required|exists:products,id',
-            'Amount_collection' => 'required|regex:/^\d*(\.\d{1,2})?$/',
-            'Amount_Commission' => 'required|regex:/^\d*(\.\d{1,2})?$/',
-            'Discount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Amount_collection' => 'required|numeric|between:0,999999.99',
+            'Amount_Commission' => 'required|numeric|between:0,999999.99',
+            'Discount' => 'required|numeric|between:0,999999.99',
             'Rate_VAT' => 'required|numeric',
-            'Value_VAT' => 'required|regex:/^\d*(\.\d{1,2})?$/',
-            'Total' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Value_VAT' => 'required|numeric|between:0,999999.99',
+            'Total' => 'required|numeric|between:0,999999.99',
             'note' => 'string|nullable',
             'attachment' => 'nullable|mimes:pdf,png,jpeg,jpg',
         ]);
@@ -154,8 +155,9 @@ class InvoiceController extends Controller
                 }
             }
             
-            $user = User::first();
-            $user->notify(new AddInvoice($invoice->id));
+            // notify users that has a 'notifications' permission except current
+            $users = User::permission('notifications')->get()->except(Auth::id());
+            Notification::send($users, new AddInvoice($invoice));
 
             session()->flash('success', 'تم اضافة  الفاتورة بنجاح ');
             return back();
@@ -204,12 +206,12 @@ class InvoiceController extends Controller
             'invoice_Date' => 'required|date',
             'Due_date' => 'required|date',
             'product_id' => 'required|exists:products,id',
-            'Amount_collection' => 'required|regex:/^\d*(\.\d{1,2})?$/',
-            'Amount_Commission' => 'required|regex:/^\d*(\.\d{1,2})?$/',
-            'Discount' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Amount_collection' => 'required|numeric|between:0,999999.99',
+            'Amount_Commission' => 'required|numeric|between:0,999999.99',
+            'Discount' => 'required|numeric|between:0,999999.99',
             'Rate_VAT' => 'required|numeric',
-            'Value_VAT' => 'required|regex:/^\d*(\.\d{1,2})?$/',
-            'Total' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'Value_VAT' => 'required|numeric|between:0,999999.99',
+            'Total' => 'required|numeric|between:0,999999.99',
             'note' => 'string|nullable',
         ]);
 
@@ -269,6 +271,7 @@ class InvoiceController extends Controller
         return back();
     }
 
+    //  get all products for a specific section
     public function getProducts($section_id)
     {
         $section = Section::findOrFail($section_id);
@@ -278,8 +281,24 @@ class InvoiceController extends Controller
         }
     }
 
+    //export invoice as excel
     public function export() 
     {
         return Excel::download(new InvoicesExport, 'invoices.xlsx');
     }
+
+    // mark all invoices notification as read for current user
+
+    public function mark_all_as_read()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        return back();
+    }
+
+    public function read_notification($id)
+    {
+        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+    }
+
+
 }

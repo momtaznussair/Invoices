@@ -252,7 +252,7 @@
                     success: function(data) {
                         @if (old('section'))
                             $('select[name="product"]').empty();
-                            $('select[name="product"]').append('<option value="0" selected disabled>حدد المنتج</option>');
+                            $('select[name="product"]').append('<option value="all" selected>الكل</option>');
                         @endif
                         $.each(data, function(key, value) {
                             $('select[name="product"]').append(

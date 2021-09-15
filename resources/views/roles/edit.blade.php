@@ -81,7 +81,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 text-center fixed-bottom mb-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 text-center fixed-bottom " style="margin-bottom: 4.5rem;">
                         <button type="submit" class="btn btn-main-primary">تحديث</button>
                     </div>
                     <!-- /col -->

@@ -69,6 +69,10 @@ Route::group(['middleware' => ['auth']], function() {
     // invoices
     Route::get('invoices-reports', [ReportController::class, 'invoices'])->name('invoices-reports');
     Route::post('search-invoices', [ReportController::class, 'searchInvoices'])->name('search-invoices');
+    // mark all notifications as read for current user
+    Route::get('all-as-read', [InvoiceController::class, 'mark_all_as_read'])->name('all-as-read');
+    //mark a notification as read
+    Route::get('read-notification/{id}', [InvoiceController::class, 'read_notification'])->name('read-notofication');
 
     // sections
     Route::get('customers-reports', [ReportController::class, 'customers'])->name('customers-reports');

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\InvoiceStatus;
+use App\Models\Product;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ReportController extends Controller
 {
@@ -47,7 +50,7 @@ class ReportController extends Controller
         }else{
 
             $invoices = Invoice::select();
-            if($request->type)
+            if($request->type != "all")
             {
                 $invoices->where('status_id', $request->type);
             }
@@ -78,9 +81,11 @@ class ReportController extends Controller
 
     public function searchCustomers(Request $request)
     {
+        $products = Product::all()->pluck('id');
+        $products[] = 'all';
         $validator = Validator::make($request->all(), [
             'section' => 'required|exists:sections,id',
-            'product' => 'nullable|exists:products,id',
+            'product' => ['nullable', Rule::in($products)],
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date',
         ],
@@ -96,7 +101,7 @@ class ReportController extends Controller
                         ->withInput();
         }
 
-        if($request->product)
+        if($request->product && $request->product != 'all')
         {
             $invoices = Invoice::where('product_id', $request->product);
         }else{

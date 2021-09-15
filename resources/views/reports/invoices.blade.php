@@ -13,6 +13,8 @@
 
     <!-- Internal Select2 css -->
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+     <!--Internal   Notify -->
+     <link href="{{URL::asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet"/>
 @endsection
 @section('title')
     تقرير الفواتير - برنامج الفواتير
@@ -70,7 +72,7 @@
                         <div class="col-lg-3 mg-t-20 mg-lg-t-0" id="type">
                             <p class="mg-b-10">تحديد نوع الفواتير</p>
                             <select class="form-control" name="type" required>
-                                <option  value="0" disabled selected>الكل</option>
+                                <option  value="all"  selected>الكل</option>
                                 @foreach ($statuses as $status)
                                     @if (old('type') && $status->id == old('type'))
                                         <option value="{{ $status->id }}" selected>{{$status->status_name}}</option>
@@ -84,7 +86,7 @@
 
                         <div class="col-lg-3 mg-t-20 mg-lg-t-0" id="invoice_number">
                             <p class="mg-b-10">البحث برقم الفاتورة</p>
-                            <input type="text" class="form-control" name="invoice_number" value="{{old('invoice_number')}}">
+                            <input type="text" class="form-control" name="invoice_number" id="invoiceNumber" value="{{old('invoice_number')}}"  oninvalid="this.setCustomValidity('الرجاء إدخال رقم الفاتورة')">
                         </div><!-- col-4 -->
 
                         <div class="col-lg-3" id="start_at">
@@ -227,6 +229,10 @@
 <script src="{{ URL::asset('assets/plugins/pickerjs/picker.min.js') }}"></script>
 <!-- Internal form-elements js -->
 <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
+<!--Internal  Notify js -->
+<script src="{{URL::asset('assets/plugins/notify/js/notifIt.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/notify/js/notifit-custom.js')}}"></script>
+
 <script>
     var date = $('.fc-datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
@@ -263,7 +269,6 @@
 
         // select the current search
         @if(old('rdio'))
-            console.log({{old('rdio')}})
             @if (old('rdio') == 1)
                 $('#type-search').prop('checked', true);
                 showType();
@@ -272,6 +277,18 @@
                 showNumber();
             @endif
         @endif
+
+        $('form').on('submit', function () {
+            if($('#number-search').prop('checked') == true && $('#invoiceNumber').val() == 0)
+            {
+                notif({
+                    msg: "<strong>يرجى إدخال رقم الفاتورة</strong>",
+                    type: "error"
+                })
+
+                return false;
+            }
+        });
     });
 </script>
 

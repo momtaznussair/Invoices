@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceAttachments;
 use App\Models\InvoiceDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class InvoiceDetailsController extends Controller
@@ -54,7 +55,6 @@ class InvoiceDetailsController extends Controller
     public function show($id)
     {
         $invoice = Invoice::findOrFail($id);
-
         return view('invoices.invoice_details', ['invoice' => $invoice]);
     }
 
