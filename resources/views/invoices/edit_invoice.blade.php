@@ -61,6 +61,11 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="col-lg-12 margin-tb mb-3">
+                        <div class="pull-right">
+                            <a class="btn btn-primary btn-sm" href="{{ route('invoices.index') }}">رجوع</a>
+                        </div>
+                    </div>
                     <form action="{{ route('invoices.update', $invoice->id)}}" method="post" enctype="multipart/form-data"
                         autocomplete="off">
                         @method('put')

@@ -49,15 +49,9 @@
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
-							<div class="card-header pb-0">
-								<div class="d-flex justify-content-between">
-									<a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white"><i
-										class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-								</div>
-							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example1" class="table key-buttons text-lg-nowrap" data-page-length="50">
+									<table id="example" class="table key-buttons text-lg-nowrap" data-page-length="10">
 										<thead>
 											<tr>
 												<th class="border-bottom-0">#</th>
@@ -91,11 +85,11 @@
 												<td>{{"$" . $invoice->Value_VAT}}</td>
 												<td>{{"$" . $invoice->Total}}</td>
 
-												@if ($invoice->status_id == 2)
+												@if ($invoice->status_id == 3)
 													<td><span
 															class="badge badge-pill badge-success">{{ $invoice->status->status_name }}</span>
 													</td>
-												@elseif($invoice->status_id == 0)
+												@elseif($invoice->status_id == 1)
 													<td><span
 															class="badge badge-pill badge-danger">{{ $invoice->status->status_name }}</span>
 													</td>

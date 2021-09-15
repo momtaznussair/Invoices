@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\InvoiceAdded;
 use App\Exports\InvoicesExport;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachments;
@@ -51,7 +52,7 @@ class InvoiceController extends Controller
      */
     public function getPaid()
     {
-        $invoices = Invoice::where('status_id', 2)->get();
+        $invoices = Invoice::where('status_id', 3)->get();
         return view('invoices.paid_invoices', ['invoices' => $invoices]);
     }
 
@@ -62,7 +63,7 @@ class InvoiceController extends Controller
      */
     public function getUnpaid()
     {
-        $invoices = Invoice::where('status_id', 0)->get();
+        $invoices = Invoice::where('status_id', 1)->get();
         return view('invoices.unpaid_invoices', ['invoices' => $invoices]);
     }
 
@@ -73,7 +74,7 @@ class InvoiceController extends Controller
      */
     public function getPartiallyPaid()
     {
-        $invoices = Invoice::where('status_id', 1)->get();
+        $invoices = Invoice::where('status_id', 2)->get();
         return view('invoices.partial_paid_invoices', ['invoices' => $invoices]);
     }
 
@@ -159,6 +160,7 @@ class InvoiceController extends Controller
             $users = User::permission('notifications')->get()->except(Auth::id());
             Notification::send($users, new AddInvoice($invoice));
 
+            broadcast(new InvoiceAdded($invoice->id, Auth::user()->name, 'تم إضافة فاتورة')); //->toOthers();
             session()->flash('success', 'تم اضافة  الفاتورة بنجاح ');
             return back();
         }
