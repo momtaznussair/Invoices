@@ -6,6 +6,7 @@ use App\Events\InvoiceAdded;
 use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class AddInvoice extends Notification
 {
     use Queueable;
-    private $invoice;
+    public $invoice;
 
     /**
      * Create a new notification instance.
@@ -33,7 +34,7 @@ class AddInvoice extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -77,6 +78,11 @@ class AddInvoice extends Notification
 
     public function toBroadcast($notifiable)
     {
-        return new InvoiceAdded($this->invoice->id, Auth::user()->name, 'تم إضافة فاتورة');
+        // return new InvoiceAdded($this->invoice->id, Auth::user()->name, 'تم إضافة فاتورة');
+        return new BroadcastMessage([
+            'invoice_id' => $this->invoice->id,
+            'title'=> 'تم إضافة فاتورة',
+            'user' => Auth::user()->name,
+        ]);
     }
 }

@@ -163,7 +163,7 @@
 									@endif
 								</a>
 								@endcan								
-								<div class="dropdown-menu">
+								<div class="dropdown-menu" id="app">
 									<div class="menu-header-content bg-primary text-right">
 										<div class="d-flex" id="notification_count">
 											<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold mb-2">الإشعارات</h6>
