@@ -1,5 +1,4 @@
 # Invoices Management system
-This is a system for managing and collecting invoices.
 
 ## Demo 
  - You can test the Invoices system at  https://invoices-system.herokuapp.com/home
