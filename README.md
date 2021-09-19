@@ -1,5 +1,5 @@
 # Invoices Management system
-
+This a Multi-user system for managing Invoices and generating reports and statistics.
 ## Demo 
  - You can test the Invoices system at  https://invoices-system.herokuapp.com/home
  - Use admin@momtaz.com as email
