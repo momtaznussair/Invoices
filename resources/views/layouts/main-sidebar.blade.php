@@ -7,13 +7,6 @@
 			<img src="{{URL::asset('assets/img/brand/favicon.png')}}" class="main-logo" alt="logo">
 		</a>
 		<span class='text-center font-weight-bold' style="font-size: 1.5rem;">Invoices</span>
-
-
-
-		{{-- <a class="desktop-logo logo-light active" href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/logo.png')}}" class="main-logo" alt="logo"></a>
-		<a class="desktop-logo logo-dark active" href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/logo-white.png')}}" class="main-logo dark-theme" alt="logo"></a>
-		<a class="logo-icon mobile-logo icon-light active" href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/favicon.png')}}" class="logo-icon" alt="logo"></a>
-		<a class="logo-icon mobile-logo icon-dark active" href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/favicon-white.png')}}" class="logo-icon dark-theme" alt="logo"></a> --}}
 	</div>
 	<div class="main-sidemenu">
 		<div class="app-sidebar__user clearfix">
