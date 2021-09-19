@@ -44,6 +44,8 @@ class HomeController extends Controller
             $paid = round($sumOfPaid / $TotalOfAllInvoices * 100);
             $unPaid = round($sumOfUnpaid / $TotalOfAllInvoices * 100);
             $partiallyPaid = round(($sumOfPartiallyPaid / $TotalOfAllInvoices) * 100);
+        }else{
+            $paid = $unPaid = $partiallyPaid  = 0;
         }
         // counts
         $customers = Section::count();
