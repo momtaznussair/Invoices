@@ -39,9 +39,12 @@ class HomeController extends Controller
         $countOfPartiallyPaid = Invoice::where('status_id', 2)->count();
         $sumOfPartiallyPaid = Invoice::where('status_id', 2)->sum('Total');
         // percentages %
-        $paid = round($sumOfPaid / $TotalOfAllInvoices * 100);
-        $unPaid = round($sumOfUnpaid / $TotalOfAllInvoices * 100);
-        $partiallyPaid = round(($sumOfPartiallyPaid / $TotalOfAllInvoices) * 100);
+        if ($TotalOfAllInvoices > 0)
+        {
+            $paid = round($sumOfPaid / $TotalOfAllInvoices * 100);
+            $unPaid = round($sumOfUnpaid / $TotalOfAllInvoices * 100);
+            $partiallyPaid = round(($sumOfPartiallyPaid / $TotalOfAllInvoices) * 100);
+        }
         // counts
         $customers = Section::count();
         $products  = Product::count();
