@@ -152,8 +152,8 @@
 										<input type="hidden" name="invoice_id" id="invoice_id" value="">
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
 										<button type="submit" class="btn btn-danger">تاكيد</button>
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
 									</div>
 							</div>
 							</form>
@@ -176,8 +176,8 @@
 										<input type="hidden" name="invoice_id" id="restore_invoice_id" value="">
 									</div>
 									<div class="modal-footer">
+										<button type="submit" class="btn btn-info">تاكيد</button>
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-										<button type="submit" class="btn btn-success">تاكيد</button>
 									</div>
 							</div>
 							</form>
