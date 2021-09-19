@@ -28,19 +28,6 @@
 
     <div class="col-lg-12 col-md-12">
 
-        @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>يرجى اصلاح الآتي</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
 
         <div class="card">
             <div class="card-body">
@@ -77,13 +64,13 @@
                         <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
                             <label>كلمة المرور: <span class="tx-danger">*</span></label>
                             <input class="form-control form-control-sm mg-b-20" data-parsley-class-handler="#lnWrapper"
-                                name="password" required="" type="password">
+                                name="password" id='password' required="" type="password">
                         </div>
 
                         <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
                             <label> تاكيد كلمة المرور: <span class="tx-danger">*</span></label>
                             <input class="form-control form-control-sm mg-b-20" data-parsley-class-handler="#lnWrapper"
-                                name="password_confirmation" required="" type="password">
+                                name="password_confirmation" id="confirm" required="" type="password">
                         </div>
                     </div>
 
@@ -132,4 +119,16 @@
 <script src="{{URL::asset('assets/plugins/parsleyjs/parsley.min.js')}}"></script>
 <!-- Internal Form-validation js -->
 <script src="{{URL::asset('assets/js/form-validation.js')}}"></script>
+<script>
+    $('form').on('submit', function () {
+        if($('#password').val() !== $('#confirm').val())
+        {
+            notif({
+                    msg: 'الرجاء إدخال كلمتي مرور متطابقتين !',
+                    type: "error"
+                });
+            return false;
+        }
+    });
+</script>
 @endsection

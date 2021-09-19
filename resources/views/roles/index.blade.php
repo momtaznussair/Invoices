@@ -1,7 +1,5 @@
 @extends('layouts.master')
 @section('css')
-    <!--Internal   Notify -->
-    <link href="{{ URL::asset('assets/plugins/notify/css/notifIt.css') }}" rel="stylesheet" />
 @section('title')
 صلاحيات المستخدمين - برنامج الفواتير 
 @stop
@@ -112,8 +110,8 @@
                             <input class="form-control" name="name" id="name" type="text" readonly>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
                             <button type="submit" class="btn btn-danger">تاكيد</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
                         </div>
                 </div>
                 </form>
@@ -129,10 +127,6 @@
 <!-- main-content closed -->
 @endsection
 @section('js')
-<!--Internal  Notify js -->
-<script src="{{ URL::asset('assets/plugins/notify/js/notifIt.js') }}"></script>
-<script src="{{ URL::asset('assets/plugins/notify/js/notifit-custom.js') }}"></script>
-
 {{-- dat from delete button to modal --}}
 <script>
     $('#delete_modal').on('show.bs.modal', function(event) {

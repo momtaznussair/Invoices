@@ -62,7 +62,7 @@ class SectionController extends Controller
                 'created_by' => Auth::user()->name,
             ]);
             
-            session()->flash('Add', 'تم اضافة القسم بنجاح ');
+            session()->flash('success', 'تم اضافة القسم بنجاح ');
             return redirect('/sections');
         }
     }
@@ -119,7 +119,7 @@ class SectionController extends Controller
                     'description' => $request->description,
                 ]);
                 
-                session()->flash('Add', 'تم تعديل القسم بنجاح ');
+                session()->flash('success', 'تم تعديل القسم بنجاح ');
                 return redirect('/sections');
             }
         }
@@ -135,7 +135,7 @@ class SectionController extends Controller
     {
         $id = $request->id;
         Section::find($id)->delete();
-        session()->flash('delete','تم حذف القسم بنجاح');
+        session()->flash('success','تم حذف القسم بنجاح');
         return redirect('/sections');
     }
 }
