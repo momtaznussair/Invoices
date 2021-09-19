@@ -12,7 +12,7 @@ class InvoiceAttachments extends Model
     protected $fillable = [
         'invoice_id',
         'file_name',
-        'created_by',
+        'Created_by',
     ];
 
     public function invoice()

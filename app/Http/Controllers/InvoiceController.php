@@ -151,7 +151,7 @@ class InvoiceController extends Controller
                     InvoiceAttachments::create([
                         'invoice_id' => $invoice->id,
                         'file_name' => $path,
-                        'created_by' => Auth::user()->name,
+                        'Created_by' => Auth::user()->name,
                     ]);
                 }
             }
