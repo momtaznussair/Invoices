@@ -2,12 +2,12 @@
 This is a system for managing and collecting invoices
 
 ## Demo 
-  You can test the Invoices system at  https://invoices-system.herokuapp.com/home
-  Use admin@momtaz.com as email
-  And momtaznussair as password
-  
-  ![login](/../master/shots/login.png?raw=true "login")  
-  
+ - You can test the Invoices system at  https://invoices-system.herokuapp.com/home
+ - Use admin@momtaz.com as email
+ - And momtaznussair as password
+
+![alt text](https://github.com/momtaznussair/Invoices/blob/main/shots/login.png?raw=true)
+
 ## Table of contents
 * [Key features](#Key-features)
 * [Technologies](#technologies)
