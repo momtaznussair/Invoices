@@ -45,7 +45,7 @@ class AddInvoice extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = 'http://localhost:8000/invoice_details/'.$this->invoice->id;
+        $url = env('APP_URL').'/invoice_details/'.$this->invoice->id;
         return (new MailMessage)
                     ->greeting('مرحباً')
                     ->subject('إضافة فاتورة جديدة')
