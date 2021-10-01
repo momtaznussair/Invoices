@@ -48,19 +48,17 @@ class InvoiceAttachmentsController extends Controller
             'invoice_number' => 'required|exists:invoices,invoice_number',
         ]);
 
-        if($validator)
+        if ($request->hasFile('attachment'))
         {
-            if ($request->hasFile('attachment'))
-            {
-                //saving attachment
-                $path = Storage::putFile($request->invoice_number, $request->file('attachment'));
-                InvoiceAttachments::create([
-                    'invoice_id' => $request->invoice_id,
-                    'file_name' => $path,
-                    'Created_by' => Auth::user()->name,
-                ]);
-            }
+            //saving attachment
+            $path = Storage::putFile($request->invoice_number, $request->file('attachment'));
+            InvoiceAttachments::create([
+                'invoice_id' => $request->invoice_id,
+                'file_name' => $path,
+                'Created_by' => Auth::user()->name,
+            ]);
         }
+        
         session()->flash('success', 'تم اضافة  المرفق بنجاح ');
         return back();
     }
