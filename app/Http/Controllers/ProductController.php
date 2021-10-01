@@ -61,16 +61,14 @@ class ProductController extends Controller
             ]
         );
 
-        if ($validator) {
-            $product = Product::create([
-                'product_name' => $request->product_name,
-                'section_id' => $request->section_id,
-                'description' => $request->description,
-            ]);
+        $product = Product::create([
+            'product_name' => $request->product_name,
+            'section_id' => $request->section_id,
+            'description' => $request->description,
+        ]);
 
-            session()->flash('success', 'تم اضافة المنتج بنجاح ');
-            return redirect('/products');
-        }
+        session()->flash('success', 'تم اضافة المنتج بنجاح ');
+        return redirect('/products');
     }
 
     /**

@@ -54,17 +54,14 @@ class SectionController extends Controller
             'section_name.max' => 'الحد الاقصى لاسم القسم هو 255 حرف',
         ]);
 
-        if ($validator)
-        {
-            $section = Section::create([
-                'section_name' => $request->section_name,
-                'description' => $request->description,
-                'created_by' => Auth::user()->name,
-            ]);
-            
-            session()->flash('success', 'تم اضافة القسم بنجاح ');
-            return redirect('/sections');
-        }
+        $section = Section::create([
+            'section_name' => $request->section_name,
+            'description' => $request->description,
+            'created_by' => Auth::user()->name,
+        ]);
+        
+        session()->flash('success', 'تم اضافة القسم بنجاح ');
+        return redirect('/sections');
     }
 
     /**
@@ -109,19 +106,16 @@ class SectionController extends Controller
             'section_name.max' => 'الحد الاقصى لاسم القسم هو 255 حرف',
         ]);
 
-        if ($validator)
+        $section = Section::find($id);
+        if ($section)
         {
-            $section = Section::find($id);
-            if ($section)
-            {
-                $section->update([
-                    'section_name' => $request->section_name,
-                    'description' => $request->description,
-                ]);
-                
-                session()->flash('success', 'تم تعديل القسم بنجاح ');
-                return redirect('/sections');
-            }
+            $section->update([
+                'section_name' => $request->section_name,
+                'description' => $request->description,
+            ]);
+            
+            session()->flash('success', 'تم تعديل القسم بنجاح ');
+            return redirect('/sections');
         }
     }
 

@@ -58,17 +58,14 @@ class InvoiceStatusController extends Controller
             'status_name.max' => 'الحد الاقصى لاسم الحالة هو 999 حرف',
         ]);
 
-        if ($validator)
-        {
-            $status = InvoiceStatus::create([
-                'status_name' => $request->status_name,
-                'description' => $request->description,
-                'created_by' => Auth::user()->name,
-            ]);
-            
-            session()->flash('success', 'تم اضافة الحالة بنجاح ');
-            return redirect('/statuses');
-        }
+        $status = InvoiceStatus::create([
+            'status_name' => $request->status_name,
+            'description' => $request->description,
+            'created_by' => Auth::user()->name,
+        ]);
+        
+        session()->flash('success', 'تم اضافة الحالة بنجاح ');
+        return redirect('/statuses');
     }
 
     /**
@@ -113,19 +110,16 @@ class InvoiceStatusController extends Controller
             'status_name.max' => 'الحد الاقصى لاسم الحالة هو 999 حرف',
         ]);
 
-        if ($validator)
+        $status = InvoiceStatus::find($id);
+        if ($status)
         {
-            $status = InvoiceStatus::find($id);
-            if ($status)
-            {
-                $status->update([
-                    'status_name' => $request->status_name,
-                    'description' => $request->description,
-                ]);
-                
-                session()->flash('success', 'تم تعديل الحالة بنجاح ');
-                return redirect('/statuses');
-            }
+            $status->update([
+                'status_name' => $request->status_name,
+                'description' => $request->description,
+            ]);
+            
+            session()->flash('success', 'تم تعديل الحالة بنجاح ');
+            return redirect('/statuses');
         }
     }
 
@@ -144,30 +138,27 @@ class InvoiceStatusController extends Controller
             'payment_date' => 'required',
         ]);
 
-        if($validator)
-        {
-            $invoice = Invoice::findOrFail($request->invoice_id);
-            // if not payed 0 => change status payement_date = null
-            //if payed 2 change status  payment_date
-            //if partially change status - []
-            $invoice->update([
-                'status_id' => $request->status_id,
-                'Payment_Date' => $request->payment_date,
-            ]);
+    $invoice = Invoice::findOrFail($request->invoice_id);
+    // if not payed 0 => change status payement_date = null
+    //if payed 2 change status  payment_date
+    //if partially change status - []
+    $invoice->update([
+        'status_id' => $request->status_id,
+        'Payment_Date' => $request->payment_date,
+    ]);
 
-            // add a record of the change in invoice details
+    // add a record of the change in invoice details
 
-            $detail = InvoiceDetails::create([
-                'invoice_id' => $invoice->id,
-                'status_id' => $request->status_id,
-                'Payment_Date' => $request->payment_date,
-                'note' => $request->note,
-                'created_by' => Auth::user()->name,
-            ]);
-            
-            session()->flash('success','تم تعديل حالة الفاتورة بنجاح');
-            return back();
-        }
+    $detail = InvoiceDetails::create([
+        'invoice_id' => $invoice->id,
+        'status_id' => $request->status_id,
+        'Payment_Date' => $request->payment_date,
+        'note' => $request->note,
+        'created_by' => Auth::user()->name,
+    ]);
+    
+    session()->flash('success','تم تعديل حالة الفاتورة بنجاح');
+    return back();
     }
 
     /**
@@ -180,7 +171,6 @@ class InvoiceStatusController extends Controller
     {
         $id = $request->id;
         InvoiceStatus::find($id)->delete();
-        session()->flash('success','تم حذف الحالة بنجاح');
-        return redirect('/statuses');
+        return back()->withSuccess('حذف الحالة بنجاح!');
     }
 }
