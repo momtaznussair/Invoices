@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('partially-paid-invoices', [InvoiceController::class, 'getPartiallyPaid'])->name('partially-paid-invoices');
 
     // archive invoices
-    Route::post('archive-invoices', [InvoiceController::class, 'archive'])->name('archive-invoices');
+    Route::get('archive-invoices/{invoice}', [InvoiceController::class, 'archive'])->name('archive-invoices');
     Route::post('restore-invoices', [InvoiceController::class, 'restore'])->name('restore-invoices');
     Route::get('archived-invoices', [InvoiceController::class, 'getArchived'])->name('archived-invoices');
 

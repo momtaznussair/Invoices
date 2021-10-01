@@ -144,12 +144,11 @@
 									<h6 class="modal-title">حذف الفاتورة</h6><button aria-label="Close" class="close"
 										data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
 								</div>
-								<form action="{{route('invoices.destroy', 'delete')}}" method="post">
+								<form action="" method="post">
 									@method('delete')
 									@csrf
 									<div class="modal-body">
 										<p>هل انت متاكد من عملية الحذف ؟</p><br>
-										<input type="hidden" name="invoice_id" id="invoice_id" value="">
 									</div>
 									<div class="modal-footer">
 										<button type="submit" class="btn btn-danger">تاكيد</button>
@@ -199,9 +198,9 @@
 <script>
 	$('#delete_modal').on('show.bs.modal', function(event) {
             let button = $(event.relatedTarget)
-            let invoice_id = button.data('invoice_id')
+            let id = button.data('invoice_id')
             let modal = $(this)
-            modal.find('.modal-body #invoice_id').val(invoice_id);
+			modal.find('form').attr('action', `invoices/${id}`);
         })
 </script>
 

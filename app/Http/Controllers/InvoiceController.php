@@ -127,33 +127,31 @@ class InvoiceController extends Controller
             'attachment' => 'nullable|mimes:pdf,png,jpeg,jpg',
         ]);
 
-        if ($validator)
+        $valid_request = $request->all();
+        $valid_request['status_id'] = 1;
+        $valid_request['created_by'] = Auth::user()->name;
+
+        $invoice = Invoice::create($valid_request);
+
+        if ($invoice)
         {
-            $valid_request = $request->all();
-            $valid_request['status_id'] = 1;
-            $valid_request['created_by'] = Auth::user()->name;
+            // saving invoice datails
+            $invoice_details = InvoiceDetails::create([
+                'invoice_id' => $invoice->id,
+                'status_id' => $invoice->status_id,
+                'created_by' => Auth::user()->name,
+            ]);
 
-            $invoice = Invoice::create($valid_request);
-
-            if ($invoice)
+            if ($request->hasFile('attachment'))
             {
-                // saving invoice datails
-                $invoice_details = InvoiceDetails::create([
+                //saving attachment
+                $path = Storage::putFile($invoice->invoice_number, $request->file('attachment'));
+                InvoiceAttachments::create([
                     'invoice_id' => $invoice->id,
-                    'status_id' => $invoice->status_id,
-                    'created_by' => Auth::user()->name,
+                    'file_name' => $path,
+                    'Created_by' => Auth::user()->name,
                 ]);
-
-                if ($request->hasFile('attachment'))
-                {
-                    //saving attachment
-                    $path = Storage::putFile($invoice->invoice_number, $request->file('attachment'));
-                    InvoiceAttachments::create([
-                        'invoice_id' => $invoice->id,
-                        'file_name' => $path,
-                        'Created_by' => Auth::user()->name,
-                    ]);
-                }
+            }
             }
             
             // notify users that has a 'notifications' permission except current
@@ -163,7 +161,6 @@ class InvoiceController extends Controller
             broadcast(new InvoiceAdded($invoice->id, Auth::user()->name, 'تم إضافة فاتورة')); //->toOthers();
             session()->flash('success', 'تم اضافة  الفاتورة بنجاح ');
             return back();
-        }
     }
 
     /**
@@ -175,7 +172,6 @@ class InvoiceController extends Controller
     public function show($invoice_id)
     {
         $invoice = Invoice::withTrashed()->where('id', $invoice_id)->first();
-
         return view('invoices.invoice', ['invoice' => $invoice]);
     }
 
@@ -185,12 +181,9 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function edit($invoice_id)
+    public function edit(Invoice $invoice)
     {
-        $invoice = Invoice::findOrFail($invoice_id);
-
         $sections = Section::all();
-
         return view('invoices.edit_invoice', ['invoice' => $invoice, 'sections' => $sections]);
     }
 
@@ -201,10 +194,10 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Invoice $invoice, Request $request)
     {
         $validator = $request->validate([
-            'invoice_number' => "required|max:50|unique:invoices,invoice_number,".$id,
+            'invoice_number' => "required|max:50|unique:invoices,invoice_number,".$invoice->id,
             'invoice_Date' => 'required|date',
             'Due_date' => 'required|date',
             'product_id' => 'required|exists:products,id',
@@ -217,20 +210,12 @@ class InvoiceController extends Controller
             'note' => 'string|nullable',
         ]);
 
-        if ($validator)
-        {
-            $invoice = Invoice::find($id);
-
-            if ($invoice)
-            {
-                $invoice->update(
-                    $request->all()
-                );
-                
-                session()->flash('success', 'تم تعديل الفاتورة بنجاح ');
-                return back();
-            }
-        }
+        $invoice->update(
+            $request->all()
+        );
+        
+        session()->flash('success', 'تم تعديل الفاتورة بنجاح ');
+        return back();
     }
 
     /**
@@ -239,22 +224,20 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $invoice_id = $request->invoice_id;
-        $invoice = Invoice::findOrFail($invoice_id);
+        $invoice = Invoice::withTrashed()->where('id', $id)->first();
         //delete attachments
         Storage::deleteDirectory($invoice->invoice_number);
+        //delete invoice permanently
         $invoice->forceDelete();
 
         session()->flash('success', 'تم حذف الفاتورة بنجاح ');
         return back();
     }
 
-    public function archive(Request $request)
+    public function archive(Invoice $invoice)
     {
-        $invoice_id = $request->invoice_id;
-        $invoice = Invoice::findOrFail($invoice_id);
 
         $invoice->Delete();
 
